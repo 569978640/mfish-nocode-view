@@ -49,7 +49,7 @@
 
         <div class="form-header">
           <h1 class="form-title">帐号登录</h1>
-          <p class="form-subtitle">欢迎使用{{ title }}低代码平台</p>
+          <!-- <p class="form-subtitle">欢迎使用{{ title }}</p> -->
         </div>
 
         <form id="login" method="POST" class="login-form">
@@ -156,9 +156,9 @@
           </div>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" id="rememberMe" type="checkbox" name="rememberMe" v-model="rememberMe" />
-            <label class="form-check-label" for="rememberMe">记住我</label>
-            <a style="float: right" href="https://jq.qq.com/?_wv=1027&k=0A2bxoZX" target="_blank">加入我们</a>
+            <!-- <input class="form-check-input" id="rememberMe" type="checkbox" name="rememberMe" v-model="rememberMe" /> -->
+            <!-- <label class="form-check-label" for="rememberMe">记住我</label> -->
+            <!-- <a style="float: right" href="https://jq.qq.com/?_wv=1027&k=0A2bxoZX" target="_blank">加入我们</a> -->
           </div>
 
           <div id="errorShow" data-bs-toggle="modal" data-bs-target="#errorModal" style="position: absolute"></div>
@@ -175,7 +175,7 @@
           </div>
         </form>
 
-        <div class="login-divider">
+        <!-- <div class="login-divider">
           <hr class="divider" style="flex: 1" />
           <span style="padding: 0 10px 0 10px">其他方式登录</span>
           <hr class="divider" style="flex: 1" />
@@ -184,7 +184,7 @@
         <div class="other-login">
           <Icon style="cursor: pointer" icon="simple-icons:gitee" color="#bf0c2c" :size="32" @click="giteeLogin" />
           <Icon style="cursor: pointer" icon="simple-icons:github" :size="32" @click="githubLogin" />
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -349,6 +349,9 @@
           description: `${t("sys.login.loginSuccessDesc")}: ${userInfo?.nickname || userInfo?.account}`,
           duration: 3
         });
+      })
+      .catch(() => {
+        captcha();
       });
   }, 200);
 
