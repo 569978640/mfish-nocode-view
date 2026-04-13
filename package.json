@@ -66,6 +66,7 @@
     "dayjs": "catalog:",
     "echarts": "^6.0.0",
     "echarts-gl": "catalog:",
+    "gsap": "^3.14.2",
     "html2canvas": "catalog:",
     "lodash-es": "catalog:",
     "markdown-it": "catalog:",
