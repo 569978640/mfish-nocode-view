@@ -26,8 +26,8 @@
       </div>
 
       <div class="left-footer">
-        <a href="https://jq.qq.com/?_wv=1027&k=0A2bxoZX" target="_blank">加入我们</a>
-        <a href="#">帮助中心</a>
+        <!-- <a href="https://jq.qq.com/?_wv=1027&k=0A2bxoZX" target="_blank">加入我们</a> -->
+        <!-- <a href="#">帮助中心</a> -->
       </div>
 
       <div class="decor-blur decor-blur-1"></div>
