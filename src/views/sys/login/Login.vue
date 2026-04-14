@@ -9,20 +9,16 @@
       <div class="left-top">
         <div class="brand-mark">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="7" fill="white" fill-opacity="0.15" />
-            <path d="M7 14L12 9L17 14L12 19L7 14Z" fill="white" fill-opacity="0.9" />
-            <path d="M13 14L18 9L21 12V16L18 19L13 14Z" fill="white" fill-opacity="0.5" />
+            <rect width="28" height="28" rx="7" fill="#1f2937" fill-opacity="0.1" />
+            <path d="M7 14L12 9L17 14L12 19L7 14Z" fill="#1f2937" fill-opacity="0.9" />
+            <path d="M13 14L18 9L21 12V16L18 19L13 14Z" fill="#1f2937" fill-opacity="0.5" />
           </svg>
         </div>
         <span class="brand-name">{{ shortName }}</span>
       </div>
 
       <div class="characters-area">
-        <AnimatedCharacters
-          :is-typing="isTyping"
-          :show-password="passwordShow"
-          :password-length="password.length"
-        />
+        <AnimatedCharacters :is-typing="isTyping" :show-password="passwordShow" :password-length="password.length" />
       </div>
 
       <div class="left-footer">
@@ -37,6 +33,14 @@
 
     <div class="right-panel">
       <div class="form-wrapper">
+        <div class="form-logo">
+          <svg width="40" height="40" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="7" fill="#111827" fill-opacity="0.08" />
+            <path d="M7 14L12 9L17 14L12 19L7 14Z" fill="#111827" fill-opacity="0.9" />
+            <path d="M13 14L18 9L21 12V16L18 19L13 14Z" fill="#111827" fill-opacity="0.5" />
+          </svg>
+        </div>
+
         <div class="mobile-logo">
           <div class="mobile-logo-icon">
             <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
@@ -48,12 +52,12 @@
         </div>
 
         <div class="form-header">
-          <h1 class="form-title">帐号登录</h1>
+          <h1 class="form-title">Welcome to {{ title }}</h1>
           <!-- <p class="form-subtitle">欢迎使用{{ title }}</p> -->
         </div>
 
         <form id="login" method="POST" class="login-form">
-          <div class="field-label">用户名</div>
+          <!-- <div class="field-label">用户名</div> -->
           <div class="form-floating mb-3">
             <input
               type="text"
@@ -62,7 +66,7 @@
               id="inputUsername"
               v-model="username"
               name="username"
-              placeholder="用户名"
+              placeholder="请输入用户名"
               @blur="validateUserName"
               @keydown.enter="login"
               @focus="isTyping = true"
@@ -74,7 +78,7 @@
             </div>
           </div>
 
-          <div class="field-label">密码</div>
+          <!-- <div class="field-label">密码</div> -->
           <div class="input-group mb-3">
             <div class="form-floating">
               <input
@@ -84,7 +88,7 @@
                 id="inputPassword"
                 v-model="password"
                 name="password"
-                placeholder="密码"
+                placeholder="请输入密码"
                 @blur="validatePassword"
                 @keydown.enter="login"
               />
@@ -106,9 +110,7 @@
                 <path
                   d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"
                 />
-                <path
-                  d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"
-                />
+                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
               </svg>
               <svg
                 v-else
@@ -142,12 +144,12 @@
                 id="inputCaptcha"
                 v-model="captchaValue"
                 name="captchaValue"
-                placeholder="验证码"
+                placeholder="请输入验证码"
                 @blur="validateCaptcha"
                 @keydown.enter="login"
               />
               <input type="hidden" name="captchaKey" v-model="captchaKey" />
-              <label for="inputCaptcha">验证码</label>
+              <!-- <label for="inputCaptcha">验证码</label> -->
               <div class="invalid-feedback" v-if="error.captcha.show">
                 {{ error.captcha.msg }}
               </div>
@@ -391,7 +393,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 48px;
-    background: linear-gradient(145deg, #0f172a 0%, #1e3a8a 50%, #1e40af 100%);
+    background: linear-gradient(145deg, #f5f5f5 0%, #e5e5e5 100%);
     overflow: hidden;
   }
 
@@ -409,7 +411,7 @@
     gap: 10px;
     font-size: 20px;
     font-weight: 700;
-    color: #ffffff;
+    color: #1f2937;
     letter-spacing: 0.5px;
   }
 
@@ -417,17 +419,16 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    backdrop-filter: blur(8px);
   }
 
   .brand-name {
-    color: #ffffff;
+    color: #1f2937;
     font-size: 20px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -474,7 +475,7 @@
     right: 10%;
     width: 300px;
     height: 300px;
-    background: rgba(59, 130, 246, 0.25);
+    background: rgba(0, 0, 0, 0.05);
     filter: blur(80px);
   }
 
@@ -483,7 +484,7 @@
     left: 5%;
     width: 400px;
     height: 400px;
-    background: rgba(30, 64, 175, 0.3);
+    background: rgba(0, 0, 0, 0.08);
     filter: blur(100px);
   }
 
@@ -491,8 +492,8 @@
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 1;
@@ -509,6 +510,18 @@
   .form-wrapper {
     width: 100%;
     max-width: 400px;
+  }
+
+  .form-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 1024px) {
+    .form-logo {
+      display: none;
+    }
   }
 
   .mobile-logo {
@@ -540,16 +553,16 @@
 
   .form-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
   }
 
   .form-title {
-    font-size: 26px;
+    font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: #0f172a;
-    margin: 0 0 10px 0;
-    line-height: 1.3;
+    color: #111827;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
   }
 
   .form-subtitle {
@@ -568,7 +581,9 @@
     background: #fafafa !important;
     border: 1px solid #e5e7eb !important;
     border-radius: 10px !important;
-    transition: border-color 0.2s, box-shadow 0.2s !important;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s !important;
   }
 
   .login-form :deep(.ant-input-affix-wrapper:hover) {
@@ -598,10 +613,10 @@
   }
 
   .field-label {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
-    color: #374151;
-    margin-bottom: 6px;
+    color: #1f2937;
+    margin-bottom: 4px;
     letter-spacing: 0.2px;
   }
 
@@ -641,7 +656,9 @@
     background: #1e40af !important;
     border-color: #1e40af !important;
     letter-spacing: 1px;
-    transition: background 0.2s, opacity 0.2s !important;
+    transition:
+      background 0.2s,
+      opacity 0.2s !important;
     cursor: pointer;
   }
 
@@ -656,28 +673,48 @@
   }
 
   .login-form .form-control {
-    border-width: 1px;
-    border-radius: 6px !important;
+    border-width: 0 0 2px 0;
+    border-radius: 0 !important;
     background-image: none;
-    height: 48px;
-    background: #fafafa;
-    border: 1px solid #e5e7eb;
+    height: 56px;
+    background: transparent;
+    border-color: #d1d5db;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 16px;
   }
 
   .login-form .form-control:focus {
-    border-color: #1e40af;
-    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.08);
-    background: #ffffff;
+    border-color: #111827;
+    box-shadow: none;
+    background: transparent;
   }
 
   .login-form .form-floating label {
     color: #6b7280;
+    padding-left: 0;
+  }
+
+  .login-form .form-floating > .form-control:focus ~ label,
+  .login-form .form-floating > .form-control:not(:placeholder-shown) ~ label,
+  .login-form .form-floating > .form-select ~ label,
+  .login-form .input-group .form-floating > .form-control:focus ~ label,
+  .login-form .input-group .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    transform: scale(0.85) translateY(-1.5rem) translateX(0.15rem);
+  }
+
+  .login-form .form-floating > .form-control {
+    padding: 1rem 0;
+  }
+
+  .login-form .form-floating > label {
+    padding: 1rem 0;
   }
 
   .login-form .send-msg {
     position: absolute;
-    top: 18px;
-    right: 10px;
+    top: 24px;
+    right: 0px;
     z-index: 10;
     border: none;
     background: transparent;
@@ -685,7 +722,7 @@
 
   .login-form .captcha-img {
     position: absolute;
-    top: 1px;
+    top: 16px;
     right: 0;
     width: 149px;
     z-index: 10;
@@ -694,24 +731,25 @@
   }
 
   .login-form .btn.btn-block {
-    padding: 10px;
-    height: 48px;
-    font-size: 15px;
+    padding: 12px;
+    height: 56px;
+    font-size: 16px;
     font-weight: 600;
-    border-radius: 10px;
-    background: #1e40af;
-    border-color: #1e40af;
+    border-radius: 28px;
+    background: #111827;
+    border-color: #111827;
     color: white;
+    margin-top: 24px;
   }
 
   .login-form .btn.btn-block:hover {
-    background: #1d4ed8;
-    border-color: #1d4ed8;
+    background: #1f2937;
+    border-color: #1f2937;
     opacity: 1;
   }
 
   .login-form .btn.btn-block:active {
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
   .login-divider {

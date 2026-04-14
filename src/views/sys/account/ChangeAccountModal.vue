@@ -25,7 +25,7 @@
       field: "account",
       component: "Input",
       label: "账号",
-      required: true,
+      required: true
     }
   ];
 

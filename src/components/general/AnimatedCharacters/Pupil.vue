@@ -3,27 +3,27 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-  size?: string
-  maxDistance?: number
-  pupilColor?: string
-}
+  interface Props {
+    size?: string;
+    maxDistance?: number;
+    pupilColor?: string;
+  }
 
-const {
-  size = '12px',
-  maxDistance = 5,
-  pupilColor = 'black'
-} = withDefaults(defineProps<Props>(), {
-  size: '12px',
-  maxDistance: 5,
-  pupilColor: 'black'
-})
+  const {
+    size = "12px",
+    maxDistance = 5,
+    pupilColor = "black"
+  } = withDefaults(defineProps<Props>(), {
+    size: "12px",
+    maxDistance: 5,
+    pupilColor: "black"
+  });
 
-const pupilStyle = {
-  width: size,
-  height: size,
-  borderRadius: '50%',
-  backgroundColor: pupilColor,
-  willChange: 'transform'
-}
+  const pupilStyle = {
+    width: size,
+    height: size,
+    borderRadius: "50%",
+    backgroundColor: pupilColor,
+    willChange: "transform"
+  };
 </script>
