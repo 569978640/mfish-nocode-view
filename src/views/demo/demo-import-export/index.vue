@@ -139,7 +139,7 @@
   const steps: TourProps["steps"] = [
     {
       title: "导入导出引导",
-      description: "学习【摸鱼低代码】-【导入导出】方法"
+      description: "学习【WindFlow】-【导入导出】方法"
     },
     {
       title: "普通模板导入",

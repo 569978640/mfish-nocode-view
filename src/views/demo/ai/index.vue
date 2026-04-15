@@ -3,7 +3,7 @@
     <div :class="`${prefixCls}-panel`">
       <ScrollContainer ref="scrollRef">
         <template v-for="(item, index) in chats">
-          <div :key="`${index}1`" :class="`${prefixCls}-wrapper`" v-if="item.user === '摸鱼机器人'">
+          <div :key="`${index}1`" :class="`${prefixCls}-wrapper`" v-if="item.user === 'WindFlow机器人'">
             <img class="chat-img" src="/resource/img/logo.png" alt="chat-img" />
             <div
               class="chat-text"
@@ -88,7 +88,7 @@
     }
     return scroll;
   };
-  const botName = "摸鱼机器人";
+  const botName = "WindFlow机器人";
   const msg = ref<string>("");
   const chats = ref<ChatsModel[]>([]);
   let eventSource: EventSource;
@@ -133,7 +133,7 @@
       id: "1",
       user: botName,
       chat:
-        "您好，我是摸鱼机器人！\n要是喜欢我，给我的开源项目点个star吧！\n" +
+        "您好，我是WindFlow机器人！\n要是喜欢我，给我的开源项目点个star吧！\n" +
         "<a href='https://github.com/mfish-qf/mfish-nocode' target='_blank'>GitHub地址</a>\n" +
         "<a href='https://gitee.com/qiufeng9862/mfish-nocode' target='_blank'>Gitee地址</a>"
     });

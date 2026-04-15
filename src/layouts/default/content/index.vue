@@ -14,7 +14,7 @@
           </AMenu.Item>
         </AMenu>
       </template>
-      <AFloatButton type="primary" tooltip="您好，我是您的摸鱼小助手" :style="{ right: '5px' }" @click="open = !open">
+      <AFloatButton type="primary" tooltip="您好，我是您的WindFlow小助手" :style="{ right: '5px' }" @click="open = !open">
         <template #icon>
           <RedditOutlined />
         </template>

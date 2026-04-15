@@ -1,5 +1,5 @@
 <!--
- @description: 摸鱼小助手
+ @description: WindFlow小助手
  @author: mfish
  @date: 2025/8/29
 -->
@@ -9,7 +9,7 @@
       <!-- 对话区 - header -->
       <!-- {chatHeader} -->
       <div :style="styles.chatHeader">
-        <div :style="styles.headerTitle"> ✨ 摸鱼小助手 </div>
+        <div :style="styles.headerTitle"> ✨ WindFlow小助手 </div>
         <Space :size="0">
           <AButton type="link" :icon="h(PlusOutlined)" size="small" @click="createNewSession" />
           <Popover
@@ -78,7 +78,7 @@
         <template v-else>
           <Welcome
             variant="borderless"
-            title="👋 欢迎，我是摸鱼小助手"
+            title="👋 欢迎，我是WindFlow小助手"
             description="要是喜欢我，请点击右边的图标，给项目点个star吧！"
             :style="styles.chatWelcome"
           >
@@ -264,7 +264,7 @@
   const SUGGEST_QUESTIONS = [
     "介绍一下自己吧！",
     "请帮我查询一下我有哪些权限？",
-    "摸鱼低代码有哪些菜单，请列出菜单树结构？",
+    "WindFlow平台有哪些菜单，请列出菜单树结构？",
     "请帮我查询字典名称为“用户性别”的字典编码？",
     "请帮我查询下字典编码为“sys_user_sex”的字典项？"
   ];

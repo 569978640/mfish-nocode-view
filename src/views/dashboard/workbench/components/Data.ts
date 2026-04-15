@@ -19,7 +19,7 @@ interface NavItem {
 
 export const navItems: NavItem[] = [
   {
-    title: "低代码",
+    title: "开发",
     icon: "ant-design:code-outlined",
     color: "#1fdaca",
     url: "/low-code"
@@ -70,7 +70,7 @@ export const groupItems: GroupItem[] = [
     title: "Github前端",
     icon: "ant-design:github-outlined",
     color: "",
-    desc: "摸鱼也会成长，摸鱼也能成功。",
+    desc: "高效开发，WindFlow与你同行。",
     group: "开源组",
     date: formatToDate(),
     url: "https://github.com/mfish-qf/mfish-nocode-view"
@@ -79,7 +79,7 @@ export const groupItems: GroupItem[] = [
     title: "Gitee后端",
     icon: "simple-icons:gitee",
     color: "#bf0c2c",
-    desc: "上班摸鱼不如来学习下摸鱼低代码",
+    desc: "欢迎使用WindFlow平台",
     group: "开源组",
     date: formatToDate(),
     url: "https://gitee.com/qiufeng9862/mfish-nocode"
@@ -94,11 +94,11 @@ export const groupItems: GroupItem[] = [
     url: "https://gitee.com/qiufeng9862/mfish-nocode-view"
   },
   {
-    title: "来摸鱼啊",
+    title: "WindFlow",
     icon: "ion:fish-outline",
     color: "#e18525",
     desc: "没有什么才能比努力更重要。",
-    group: "上班摸鱼",
+    group: "高效开发",
     date: formatToDate(),
     url: "https://www.mfish.com.cn"
   },
