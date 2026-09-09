@@ -1,6 +1,6 @@
 {
   "name": "@mfish/eslint-config",
-  "version": "2.3.1",
+  "version": "2.4.1",
   "private": true,
   "license": "Apache-2.0",
   "author": {
@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "stub": "pnpm unbuild --stub"
+    "stub": "unbuild --stub"
   },
   "dependencies": {
     "eslint-config-turbo": "catalog:",
@@ -35,7 +35,7 @@
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
-    "eslint-plugin-eslint-comments": "catalog:",
+    "@eslint-community/eslint-plugin-eslint-comments": "catalog:",
     "eslint-plugin-jsdoc": "catalog:",
     "eslint-plugin-jsonc": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",

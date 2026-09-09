@@ -1,6 +1,6 @@
 {
   "name": "@mfish/vite-config",
-  "version": "2.3.1",
+  "version": "2.4.1",
   "private": true,
   "license": "Apache-2.0",
   "author": {
@@ -22,33 +22,29 @@
     "dist"
   ],
   "scripts": {
-    "stub": "pnpm unbuild --stub"
+    "stub": "unbuild --stub"
   },
   "dependencies": {
     "@ant-design/colors": "catalog:"
   },
   "devDependencies": {
-    "@types/fs-extra": "catalog:",
     "@types/js-yaml": "^4.0.9",
     "@vitejs/plugin-vue": "catalog:",
     "@vitejs/plugin-vue-jsx": "catalog:",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "dotenv": "catalog:",
-    "fs-extra": "catalog:",
     "less": "catalog:",
     "picocolors": "catalog:",
     "pkg-types": "catalog:",
     "postcss": "catalog:",
-    "rollup-plugin-visualizer": "catalog:",
     "unbuild": "catalog:",
     "unocss": "catalog:",
-    "vite": "^7.3.2",
+    "vite": "^8.1.5",
+    "vite-bundle-analyzer": "catalog:",
     "vite-plugin-compression": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vite-plugin-html": "catalog:",
-    "vite-plugin-mock": "catalog:",
     "vite-plugin-svg-icons": "catalog:",
-    "yaml": "^2.8.3"
+    "yaml": "^2.9.0"
   }
 }

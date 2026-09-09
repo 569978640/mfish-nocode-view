@@ -2,7 +2,7 @@
  @description: 大屏资源发布
  @author: mfish
  @date: 2025-03-19
- @version: V2.3.1
+ @version: V2.4.1
 -->
 <template>
   <BasicModal v-bind="$attrs" @register="registerModal" title="资源发布">
@@ -40,6 +40,7 @@
   import { Image as AImage, Popconfirm as APopconfirm } from "ant-design-vue";
   import { FormSchema } from "@mfish/core/components/Table";
   import { getLocalFileUrl, imageUrl } from "@mfish/core/utils/file/FileUtils";
+  import "@/components/nocode/screen/custom-components/register";
 
   defineOptions({ name: "ScreenReleaseModal" });
   const props = defineProps({

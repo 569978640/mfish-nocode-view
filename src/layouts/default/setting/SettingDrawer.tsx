@@ -11,7 +11,7 @@ import {
   TypePicker
 } from "./components";
 import { AppDarkModeToggle } from "@/components/general/Application";
-import { MenuTypeEnum, TriggerEnum } from "@mfish/core/enums";
+import { MenuModeEnum, MenuTypeEnum, TriggerEnum } from "@mfish/core/enums";
 import { useHeaderSetting, useI18n, useMenuSetting, useMultipleTabSetting, useRootSetting } from "@mfish/core/hooks";
 import { baseHandler } from "./Handler";
 import {
@@ -84,7 +84,7 @@ export default defineComponent({
             baseHandler(HandlerEnum.CHANGE_LAYOUT, {
               mode: item.mode,
               type: item.type,
-              split: unref(getIsHorizontal) ? false : undefined
+              split: item.mode === MenuModeEnum.INLINE && item.type === MenuTypeEnum.MIX
             });
           }}
           def={unref(getMenuType)}

@@ -2,7 +2,7 @@
  @description: 文件目录列表
  @author: mfish
  @date: 2023-07-28
- @version: V2.3.1
+ @version: V2.4.1
 -->
 <template>
   <div :class="prefixCls">
@@ -252,7 +252,7 @@
       api: () =>
         getFileFolderAndFile({
           parentId: name ? undefined : props.folderId,
-          name: name || undefined,
+          name: name ?? undefined,
           pageNum: (getPaginationRef() as PaginationProps).current,
           pageSize: (getPaginationRef() as PaginationProps).pageSize
         })

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm why *)",
+      "Bash(pnpm update *)",
+      "Bash(npm view *)",
+      "WebSearch",
+      "Bash(npx vue-tsc *)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm ls *)",
+      "Bash(pnpm view *)",
+      "Bash(pnpm install *)",
+      "Bash(VITE_USE_VISUALIZER=true pnpm run stub)",
+      "Bash(grep -oE '.{0,80}MfButton.{0,80}' \"E:/javacode/mfish-nocode-pro/mfish-nocode-view/packages/nocode/core/src.js\")",
+      "Bash(grep -oE '.{0,30}ComType.{0,30}' \"E:/javacode/mfish-nocode-pro/mfish-nocode-view/packages/nocode/core/index.mjs\")",
+      "Bash(grep *)",
+      "Bash(npm run *)",
+      "Skill(add-screen-component)",
+      "Bash(powershell *)"
+    ]
+  }
+}
