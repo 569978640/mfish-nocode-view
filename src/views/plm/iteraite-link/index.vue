@@ -53,14 +53,18 @@
   import { BasicTable, useTable, TableAction } from "@mfish/core/components/Table";
   import { useModal } from "@mfish/core/components/Modal";
   import { Button as AButton } from "@mfish/core/components/Button";
-  import { deleteBatchIteraiteLink, deleteIteraiteLink, exportIteraiteLink, getIteraiteLinkList } from "@/api/plm/IteraiteLink";
+  import {
+    deleteBatchIteraiteLink,
+    deleteIteraiteLink,
+    exportIteraiteLink,
+    getIteraiteLinkList
+  } from "@/api/plm/IteraiteLink";
   import IteraiteLinkModal from "./IteraiteLinkModal.vue";
   import IteraiteLinkViewModal from "./IteraiteLinkViewModal.vue";
   import { columns, searchFormSchema } from "./iteraiteLink.data";
   import { IteraiteLink } from "@/api/plm/model/IteraiteLinkModel";
   import { ref } from "vue";
   import { useMessage } from "@mfish/core/hooks";
-
 
   defineOptions({ name: "IteraiteLinkManagement" });
   const [registerModal, { openModal }] = useModal();

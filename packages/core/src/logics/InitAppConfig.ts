@@ -12,7 +12,8 @@ import { getCommonStoragePrefix, getStorageShortName } from "@core/utils/Env.ts"
 import { ThemeEnum } from "@core/enums";
 import { getSysConfig } from "@/api/sys/SysConfig.ts";
 import { useAppStore, useTableSettingStore, useUserStoreWithOut } from "@mfish/stores/modules";
-import { sleep } from "@core/utils/Utils.ts";
+import { deepMerge } from "@core/utils/index.ts";
+import { cloneDeep } from "lodash-es";
 
 export async function initAppConfigStore() {
   // 设置本地样式
@@ -36,8 +37,20 @@ async function setAppConfigStore() {
     if (sysConfig.type === 1 && sysConfig && sysConfig.config) {
       useTableSettingStore().setTableSetting(JSON.parse(sysConfig.config));
     } else if (sysConfig.type === 0) {
-      const projCfg: ProjectConfig =
-        sysConfig && sysConfig.config ? (JSON.parse(sysConfig.config) as ProjectConfig) : projectSetting;
+      let projCfg: ProjectConfig = projectSetting;
+      if (sysConfig && sysConfig.config) {
+        const dbCfg = JSON.parse(sysConfig.config) as ProjectConfig;
+        projCfg = deepMerge(cloneDeep(projectSetting), dbCfg);
+        if (projectSetting.headerSetting.showNotice !== "readDB") {
+          projCfg.headerSetting.showNotice = projectSetting.headerSetting.showNotice;
+        }
+        if (projectSetting.headerSetting.showTenant !== "readDB") {
+          projCfg.headerSetting.showTenant = projectSetting.headerSetting.showTenant;
+        }
+        if (projectSetting.showSettingButton !== "readDB") {
+          projCfg.showSettingButton = projectSetting.showSettingButton;
+        }
+      }
       changeAppConfig(projCfg);
     }
   }

@@ -32,10 +32,9 @@ export const columns: BasicColumn[] = [
     title: "",
     dataIndex: "toType",
     width: 120
-  },
+  }
 ];
-export const searchFormSchema: FormSchema[] = [
-];
+export const searchFormSchema: FormSchema[] = [];
 export const iteraiteLinkFormSchema: FormSchema[] = [
   {
     field: "id",
@@ -46,28 +45,28 @@ export const iteraiteLinkFormSchema: FormSchema[] = [
   {
     field: "type",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "fromId",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "fromType",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "toId",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "toType",
     label: "",
-    component: "Input",
-  },
+    component: "Input"
+  }
 ];
 
 export class IteraiteLinkDesc {
@@ -96,6 +95,6 @@ export class IteraiteLinkDesc {
     {
       field: "toType",
       label: ""
-    },
+    }
   ];
 }

@@ -125,11 +125,9 @@
   });
 
   const getIsFixed = computed(() => {
-    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
     mixSideHasChildren.value = unref(childrenMenus).length > 0;
     const isFixed = unref(getMixSideFixed) && unref(mixSideHasChildren);
     if (isFixed) {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       openMenu.value = true;
     }
     return isFixed;

@@ -53,14 +53,18 @@
   import { BasicTable, useTable, TableAction } from "@mfish/core/components/Table";
   import { useModal } from "@mfish/core/components/Modal";
   import { Button as AButton } from "@mfish/core/components/Button";
-  import { deleteBatchDocumentMaster, deleteDocumentMaster, exportDocumentMaster, getDocumentMasterList } from "@/api/plm/DocumentMaster";
+  import {
+    deleteBatchDocumentMaster,
+    deleteDocumentMaster,
+    exportDocumentMaster,
+    getDocumentMasterList
+  } from "@/api/plm/DocumentMaster";
   import DocumentMasterModal from "./DocumentMasterModal.vue";
   import DocumentMasterViewModal from "./DocumentMasterViewModal.vue";
   import { columns, searchFormSchema } from "./documentMaster.data";
   import { DocumentMaster } from "@/api/plm/model/DocumentMasterModel";
   import { ref } from "vue";
   import { useMessage } from "@mfish/core/hooks";
-
 
   defineOptions({ name: "DocumentMasterManagement" });
   const [registerModal, { openModal }] = useModal();

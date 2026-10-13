@@ -1,6 +1,6 @@
 import type { HeaderSetting } from "@mfish/types/src/type/config";
 import { computed, unref } from "vue";
-import { useAppStore } from "@mfish/stores/modules";
+import { useAppStore, useUserStore } from "@mfish/stores/modules";
 import { useFullContent, useMenuSetting, useRootSetting } from "@core/hooks";
 import { MenuModeEnum } from "../../enums";
 
@@ -47,7 +47,19 @@ export function useHeaderSetting() {
 
   const getShowFullScreen = computed(() => appStore.getHeaderSetting.showFullScreen);
 
-  const getShowNotice = computed(() => appStore.getHeaderSetting.showNotice);
+  const getShowNotice = computed(() => {
+    const userStore = useUserStore();
+    if (userStore.getUserInfo?.account === "admin") return true;
+    const setting = appStore.getHeaderSetting.showNotice;
+    return setting === "readDB" ? true : setting;
+  });
+
+  const getShowTenant = computed(() => {
+    const userStore = useUserStore();
+    if (userStore.getUserInfo?.account === "admin") return true;
+    const setting = appStore.getHeaderSetting.showTenant;
+    return setting === "readDB" ? true : setting !== false;
+  });
 
   const getShowBread = computed(() => {
     return unref(getMenuMode) !== MenuModeEnum.HORIZONTAL && unref(getShowBreadCrumb) && !unref(getSplit);
@@ -75,6 +87,7 @@ export function useHeaderSetting() {
     getUseLockPage,
     getShowFullScreen,
     getShowNotice,
+    getShowTenant,
     getShowBread,
     getShowContent,
     getShowHeaderLogo,

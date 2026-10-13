@@ -1,6 +1,6 @@
 import type { ProjectConfig } from "@mfish/types/src/type/config";
 import { computed } from "vue";
-import { useAppStore } from "@mfish/stores/modules";
+import { useAppStore, useUserStore } from "@mfish/stores/modules";
 import { ContentEnum, ThemeEnum } from "../../enums";
 
 type RootSetting = Omit<ProjectConfig, "locale" | "headerSetting" | "menuSetting" | "multiTabsSetting">;
@@ -22,7 +22,12 @@ export function useRootSetting() {
 
   const getUseOpenBackTop = computed(() => appStore.getProjectConfig.useOpenBackTop);
 
-  const getShowSettingButton = computed(() => appStore.getProjectConfig.showSettingButton);
+  const getShowSettingButton = computed(() => {
+    const userStore = useUserStore();
+    if (userStore.getUserInfo?.account === "admin") return true;
+    const setting = appStore.getProjectConfig.showSettingButton;
+    return setting === "readDB" ? true : setting;
+  });
 
   const getUseErrorHandle = computed(() => appStore.getProjectConfig.useErrorHandle);
 

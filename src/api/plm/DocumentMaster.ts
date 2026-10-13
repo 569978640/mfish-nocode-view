@@ -46,7 +46,10 @@ export function exportDocumentMaster(reqDocumentMaster?: ReqDocumentMaster) {
  * @return 返回结果
  */
 export function insertDocumentMaster(documentMaster: DocumentMaster) {
-  return defHttp.post<DocumentMaster>({ url: Api.DocumentMaster, params: documentMaster }, { successMessageMode: "message" });
+  return defHttp.post<DocumentMaster>(
+    { url: Api.DocumentMaster, params: documentMaster },
+    { successMessageMode: "message" }
+  );
 }
 
 /**
@@ -56,7 +59,10 @@ export function insertDocumentMaster(documentMaster: DocumentMaster) {
  * @return 返回结果
  */
 export function updateDocumentMaster(documentMaster: DocumentMaster) {
-  return defHttp.put<DocumentMaster>({ url: Api.DocumentMaster, params: documentMaster }, { successMessageMode: "message" });
+  return defHttp.put<DocumentMaster>(
+    { url: Api.DocumentMaster, params: documentMaster },
+    { successMessageMode: "message" }
+  );
 }
 
 /**

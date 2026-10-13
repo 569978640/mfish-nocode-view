@@ -22,7 +22,7 @@ export const columns: BasicColumn[] = [
     title: "",
     dataIndex: "name",
     width: 120
-  },
+  }
 ];
 export const searchFormSchema: FormSchema[] = [
   {
@@ -36,7 +36,7 @@ export const searchFormSchema: FormSchema[] = [
     label: "",
     component: "Input",
     colProps: { xl: 5, md: 6 }
-  },
+  }
 ];
 export const partMasterFormSchema: FormSchema[] = [
   {
@@ -48,18 +48,18 @@ export const partMasterFormSchema: FormSchema[] = [
   {
     field: "type",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "number",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "name",
     label: "",
-    component: "Input",
-  },
+    component: "Input"
+  }
 ];
 
 export class PartMasterDesc {
@@ -80,6 +80,6 @@ export class PartMasterDesc {
     {
       field: "name",
       label: ""
-    },
+    }
   ];
 }

@@ -399,22 +399,26 @@
     const { action: type } = action;
     let delay = 0;
     switch (type) {
-      case "navigate":
+      case "navigate": {
         // router.push 已 await（路由切换完成），等待目标页面组件挂载 + onTableRefresh 注册 + 列表首次加载
         delay = 500;
         break;
-      case "refresh":
+      }
+      case "refresh": {
         // triggerTableRefresh 同步触发 reload，reload 在后台异步查询，不阻塞下一个 action
         delay = 0;
         break;
-      case "openModal":
+      }
+      case "openModal": {
         // 模态框打开 + 表单渲染
         delay = 300;
         break;
-      case "fill":
+      }
+      case "fill": {
         // 表单填充后可能触发联动，稍等一下
         delay = 100;
         break;
+      }
     }
     if (delay <= 0) return Promise.resolve();
     return new Promise((resolve) => setTimeout(resolve, delay));

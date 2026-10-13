@@ -10,7 +10,9 @@
       <template #toolbar>
         <AButton type="primary" @click="handleCreate" v-auth="'plm:productReportFieldConfig:insert'">新增</AButton>
         <AButton color="warning" @click="handleExport" v-auth="'plm:productReportFieldConfig:export'">导出</AButton>
-        <AButton color="error" @click="handleBatchDelete" v-auth="'plm:productReportFieldConfig:delete'">批量删除</AButton>
+        <AButton color="error" @click="handleBatchDelete" v-auth="'plm:productReportFieldConfig:delete'">
+          批量删除
+        </AButton>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -53,14 +55,18 @@
   import { BasicTable, useTable, TableAction } from "@mfish/core/components/Table";
   import { useModal } from "@mfish/core/components/Modal";
   import { Button as AButton } from "@mfish/core/components/Button";
-  import { deleteBatchProductReportFieldConfig, deleteProductReportFieldConfig, exportProductReportFieldConfig, getProductReportFieldConfigList } from "@/api/plm/ProductReportFieldConfig";
+  import {
+    deleteBatchProductReportFieldConfig,
+    deleteProductReportFieldConfig,
+    exportProductReportFieldConfig,
+    getProductReportFieldConfigList
+  } from "@/api/plm/ProductReportFieldConfig";
   import ProductReportFieldConfigModal from "./ProductReportFieldConfigModal.vue";
   import ProductReportFieldConfigViewModal from "./ProductReportFieldConfigViewModal.vue";
   import { columns, searchFormSchema } from "./productReportFieldConfig.data";
   import { ProductReportFieldConfig } from "@/api/plm/model/ProductReportFieldConfigModel";
   import { ref } from "vue";
   import { useMessage } from "@mfish/core/hooks";
-
 
   defineOptions({ name: "ProductReportFieldConfigManagement" });
   const [registerModal, { openModal }] = useModal();

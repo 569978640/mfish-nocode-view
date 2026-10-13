@@ -36,7 +36,7 @@ export function getDemoOrderById(id: string) {
  * @param reqDemoOrder 请求参数
  */
 export function exportDemoOrder(reqDemoOrder?: ReqDemoOrder) {
-  return defHttp.download({ url: Api.DemoOrder + "/export", params: reqDemoOrder });
+  return defHttp.download({ url: `${Api.DemoOrder}/export`, params: reqDemoOrder });
 }
 
 /**
@@ -76,5 +76,5 @@ export function deleteDemoOrder(id: string) {
  * @return 返回结果
  */
 export function deleteBatchDemoOrder(ids: string) {
-  return defHttp.delete<boolean>({ url: Api.DemoOrder + "/batch/" + ids }, { successMessageMode: "message" });
+  return defHttp.delete<boolean>({ url: `${Api.DemoOrder}/batch/${ids}` }, { successMessageMode: "message" });
 }

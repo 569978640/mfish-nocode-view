@@ -61,7 +61,6 @@
   import { ref } from "vue";
   import { useMessage } from "@mfish/core/hooks";
 
-
   defineOptions({ name: "FolderManagement" });
   const [registerModal, { openModal }] = useModal();
   const [registerViewModal, { openModal: openViewModal }] = useModal();

@@ -36,7 +36,7 @@ export function getDemoDataScopeById(id: string) {
  * @param reqDemoDataScope
  */
 export const getCurrentTenant = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/currentTenant", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/currentTenant`, params: reqDemoDataScope });
 };
 
 /**
@@ -44,7 +44,7 @@ export const getCurrentTenant = (reqDemoDataScope?: ReqDemoDataScope) => {
  * @param reqDemoDataScope
  */
 export const getCurrentOrg = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/currentOrg", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/currentOrg`, params: reqDemoDataScope });
 };
 
 /**
@@ -52,7 +52,7 @@ export const getCurrentOrg = (reqDemoDataScope?: ReqDemoDataScope) => {
  * @param reqDemoDataScope
  */
 export const getCurrentRole = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/currentRole", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/currentRole`, params: reqDemoDataScope });
 };
 
 /**
@@ -60,14 +60,14 @@ export const getCurrentRole = (reqDemoDataScope?: ReqDemoDataScope) => {
  * @param reqDemoDataScope
  */
 export const getAdminOrg = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/adminOrg", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/adminOrg`, params: reqDemoDataScope });
 };
 
 /**
  * 查询角色编码为manage或superAdmin数据
  */
 export const getFixRole = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/fixRole", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/fixRole`, params: reqDemoDataScope });
 };
 
 /**
@@ -75,5 +75,5 @@ export const getFixRole = (reqDemoDataScope?: ReqDemoDataScope) => {
  * @param reqDemoDataScope
  */
 export const getMixScope = (reqDemoDataScope?: ReqDemoDataScope) => {
-  return defHttp.get<DemoDataScopePageModel>({ url: Api.DemoDataScope + "/mixScope", params: reqDemoDataScope });
+  return defHttp.get<DemoDataScopePageModel>({ url: `${Api.DemoDataScope}/mixScope`, params: reqDemoDataScope });
 };

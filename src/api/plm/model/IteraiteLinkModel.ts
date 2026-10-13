@@ -19,8 +19,7 @@ export interface IteraiteLink extends BaseEntity<string> {
   toType?: string;
 }
 
-export interface ReqIteraiteLink extends ReqPage {
-}
+export interface ReqIteraiteLink extends ReqPage {}
 
 //分页结果集
 export type IteraiteLinkPageModel = PageResult<IteraiteLink>;

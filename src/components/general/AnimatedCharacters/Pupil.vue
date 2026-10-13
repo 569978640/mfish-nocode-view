@@ -1,5 +1,5 @@
 <template>
-  <div :data-max-distance="maxDistance" class="pupil" :style="pupilStyle" />
+  <div :data-max-distance="maxDistance" class="pupil" :style="pupilStyle"></div>
 </template>
 
 <script setup lang="ts">

@@ -199,7 +199,6 @@
   import { useGlobSetting, useI18n, useMessage } from "@mfish/core/hooks";
   import { useUserStore } from "@mfish/stores/modules";
   import { debounce } from "lodash-es";
-  import { Icon } from "@mfish/core/components/Icon";
   import AnimatedCharacters from "@/components/general/AnimatedCharacters/Index.vue";
 
   const username = ref("");

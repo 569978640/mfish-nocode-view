@@ -26,7 +26,7 @@
         <Pupil size="12px" :max-distance="5" pupil-color="#2D2D2D" />
         <Pupil size="12px" :max-distance="5" pupil-color="#2D2D2D" />
       </div>
-      <div ref="yellowMouthRef" :style="yellowMouthStyle" />
+      <div ref="yellowMouthRef" :style="yellowMouthStyle"></div>
     </div>
   </div>
 </template>
@@ -253,7 +253,7 @@
       const cy = r.top + r.height / 2;
       const dx = mouseRef.x - cx;
       const dy = mouseRef.y - cy;
-      const dist = Math.min(Math.sqrt(dx ** 2 + dy ** 2), maxDist);
+      const dist = Math.min(Math.hypot(dx, dy), maxDist);
       const angle = Math.atan2(dy, dx);
       return { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist };
     };
@@ -358,11 +358,11 @@
       mouseRef.y = e.clientY;
     };
 
-    window.addEventListener("mousemove", onMove, { passive: true });
+    globalThis.addEventListener("mousemove", onMove, { passive: true });
     rafIdRef.value = requestAnimationFrame(tick);
 
     onBeforeUnmount(() => {
-      window.removeEventListener("mousemove", onMove);
+      globalThis.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(rafIdRef.value);
     });
   });

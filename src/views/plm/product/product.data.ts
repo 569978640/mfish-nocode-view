@@ -17,7 +17,7 @@ export const columns: BasicColumn[] = [
     title: "产品名称",
     dataIndex: "name",
     width: 120
-  },
+  }
 ];
 export const searchFormSchema: FormSchema[] = [
   {
@@ -37,7 +37,7 @@ export const searchFormSchema: FormSchema[] = [
     label: "",
     component: "Input",
     colProps: { xl: 5, md: 6 }
-  },
+  }
 ];
 export const productFormSchema: FormSchema[] = [
   {
@@ -49,13 +49,13 @@ export const productFormSchema: FormSchema[] = [
   {
     field: "type",
     label: "类型",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "name",
     label: "产品名称",
-    component: "Input",
-  },
+    component: "Input"
+  }
 ];
 
 export class ProductDesc {
@@ -72,6 +72,6 @@ export class ProductDesc {
     {
       field: "name",
       label: "产品名称"
-    },
+    }
   ];
 }

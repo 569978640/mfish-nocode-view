@@ -1,6 +1,6 @@
 <template>
   <div class="eyeball" :data-max-distance="maxDistance" :style="eyeballStyle">
-    <div class="eyeball-pupil" :style="pupilStyle" />
+    <div class="eyeball-pupil" :style="pupilStyle"></div>
   </div>
 </template>
 

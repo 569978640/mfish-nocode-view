@@ -132,6 +132,10 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
       return { transitionSetting: { enable: value } };
     }
 
+    case HandlerEnum.SHOW_SETTING_BUTTON: {
+      return { showSettingButton: value };
+    }
+
     case HandlerEnum.OPEN_PROGRESS: {
       return { transitionSetting: { openNProgress: value } };
     }
@@ -200,6 +204,14 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
 
     case HandlerEnum.HEADER_SEARCH: {
       return { headerSetting: { showSearch: value } };
+    }
+
+    case HandlerEnum.HEADER_NOTICE: {
+      return { headerSetting: { showNotice: value } };
+    }
+
+    case HandlerEnum.HEADER_TENANT: {
+      return { headerSetting: { showTenant: value } };
     }
 
     case HandlerEnum.HEADER_FIXED: {

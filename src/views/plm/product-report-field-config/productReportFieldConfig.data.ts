@@ -22,7 +22,7 @@ export const columns: BasicColumn[] = [
     title: "类型",
     dataIndex: "type",
     width: 120
-  },
+  }
 ];
 export const searchFormSchema: FormSchema[] = [
   {
@@ -30,7 +30,7 @@ export const searchFormSchema: FormSchema[] = [
     label: "编号",
     component: "Input",
     colProps: { xl: 5, md: 6 }
-  },
+  }
 ];
 export const productReportFieldConfigFormSchema: FormSchema[] = [
   {
@@ -56,7 +56,7 @@ export const productReportFieldConfigFormSchema: FormSchema[] = [
     label: "类型",
     component: "Input",
     required: true
-  },
+  }
 ];
 
 export class ProductReportFieldConfigDesc {
@@ -77,6 +77,6 @@ export class ProductReportFieldConfigDesc {
     {
       field: "type",
       label: "类型"
-    },
+    }
   ];
 }

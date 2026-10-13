@@ -221,13 +221,11 @@
         return;
       }
       // 每 16ms 显示 2 个字符，兼顾中英文阅读速度
-      typingTimer = window.setInterval(() => {
+      typingTimer = globalThis.setInterval(() => {
         displayedLength.value = Math.min(displayedLength.value + 2, newVal.length);
-        if (displayedLength.value >= newVal.length) {
-          if (typingTimer) {
-            clearInterval(typingTimer);
-            typingTimer = null;
-          }
+        if (displayedLength.value >= newVal.length && typingTimer) {
+          clearInterval(typingTimer);
+          typingTimer = null;
         }
       }, 16);
     },

@@ -181,8 +181,7 @@
                 msgId: i.id,
                 agent: i.agent!,
                 finalContent: i.message.content,
-                animateTyping:
-                  i.animateTyping && (i.status === "pending" || i.status === "loading")
+                animateTyping: i.animateTyping && (i.status === "pending" || i.status === "loading")
               })
           : hasFiles
             ? (content: any) =>

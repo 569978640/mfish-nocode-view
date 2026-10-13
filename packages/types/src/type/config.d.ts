@@ -89,7 +89,7 @@ export interface ProjectConfig {
   // Storage location of permission related information
   permissionCacheType: CacheTypeEnum;
   // Whether to show the configuration button
-  showSettingButton: boolean;
+  showSettingButton: boolean | "readDB";
   // Whether to show the theme switch button
   showDarkModeToggle: boolean;
   // Configure where the button is displayed
@@ -151,7 +151,9 @@ export interface HeaderSetting {
   // Show document button
   showDoc: boolean;
   // Show message center button
-  showNotice: boolean;
+  showNotice: boolean | "readDB";
+  // Show tenant dropdown
+  showTenant: boolean | "readDB";
   showSearch: boolean;
 }
 

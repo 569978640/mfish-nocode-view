@@ -53,14 +53,18 @@
   import { BasicTable, useTable, TableAction } from "@mfish/core/components/Table";
   import { useModal } from "@mfish/core/components/Modal";
   import { Button as AButton } from "@mfish/core/components/Button";
-  import { deleteBatchContainsLink, deleteContainsLink, exportContainsLink, getContainsLinkList } from "@/api/plm/ContainsLink";
+  import {
+    deleteBatchContainsLink,
+    deleteContainsLink,
+    exportContainsLink,
+    getContainsLinkList
+  } from "@/api/plm/ContainsLink";
   import ContainsLinkModal from "./ContainsLinkModal.vue";
   import ContainsLinkViewModal from "./ContainsLinkViewModal.vue";
   import { columns, searchFormSchema } from "./containsLink.data";
   import { ContainsLink } from "@/api/plm/model/ContainsLinkModel";
   import { ref } from "vue";
   import { useMessage } from "@mfish/core/hooks";
-
 
   defineOptions({ name: "ContainsLinkManagement" });
   const [registerModal, { openModal }] = useModal();

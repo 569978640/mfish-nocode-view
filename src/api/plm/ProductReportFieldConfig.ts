@@ -1,5 +1,9 @@
 import { defHttp } from "@mfish/core/utils/http/axios";
-import { ProductReportFieldConfig, ReqProductReportFieldConfig, ProductReportFieldConfigPageModel } from "@/api/plm/model/ProductReportFieldConfigModel";
+import {
+  ProductReportFieldConfig,
+  ReqProductReportFieldConfig,
+  ProductReportFieldConfigPageModel
+} from "@/api/plm/model/ProductReportFieldConfigModel";
 
 /**
  * @description: 产品系列报表字段配置
@@ -18,7 +22,10 @@ enum Api {
  * @return 返回分页列表
  */
 export const getProductReportFieldConfigList = (reqProductReportFieldConfig?: ReqProductReportFieldConfig) => {
-  return defHttp.get<ProductReportFieldConfigPageModel>({ url: Api.ProductReportFieldConfig, params: reqProductReportFieldConfig });
+  return defHttp.get<ProductReportFieldConfigPageModel>({
+    url: Api.ProductReportFieldConfig,
+    params: reqProductReportFieldConfig
+  });
 };
 
 /**
@@ -46,7 +53,10 @@ export function exportProductReportFieldConfig(reqProductReportFieldConfig?: Req
  * @return 返回结果
  */
 export function insertProductReportFieldConfig(productReportFieldConfig: ProductReportFieldConfig) {
-  return defHttp.post<ProductReportFieldConfig>({ url: Api.ProductReportFieldConfig, params: productReportFieldConfig }, { successMessageMode: "message" });
+  return defHttp.post<ProductReportFieldConfig>(
+    { url: Api.ProductReportFieldConfig, params: productReportFieldConfig },
+    { successMessageMode: "message" }
+  );
 }
 
 /**
@@ -56,7 +66,10 @@ export function insertProductReportFieldConfig(productReportFieldConfig: Product
  * @return 返回结果
  */
 export function updateProductReportFieldConfig(productReportFieldConfig: ProductReportFieldConfig) {
-  return defHttp.put<ProductReportFieldConfig>({ url: Api.ProductReportFieldConfig, params: productReportFieldConfig }, { successMessageMode: "message" });
+  return defHttp.put<ProductReportFieldConfig>(
+    { url: Api.ProductReportFieldConfig, params: productReportFieldConfig },
+    { successMessageMode: "message" }
+  );
 }
 
 /**
@@ -76,5 +89,8 @@ export function deleteProductReportFieldConfig(id: string) {
  * @return 返回结果
  */
 export function deleteBatchProductReportFieldConfig(ids: string) {
-  return defHttp.delete<boolean>({ url: `${Api.ProductReportFieldConfig}/batch/${ids}` }, { successMessageMode: "message" });
+  return defHttp.delete<boolean>(
+    { url: `${Api.ProductReportFieldConfig}/batch/${ids}` },
+    { successMessageMode: "message" }
+  );
 }

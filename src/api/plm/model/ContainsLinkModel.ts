@@ -19,8 +19,7 @@ export interface ContainsLink extends BaseEntity<string> {
   toType?: string;
 }
 
-export interface ReqContainsLink extends ReqPage {
-}
+export interface ReqContainsLink extends ReqPage {}
 
 //分页结果集
 export type ContainsLinkPageModel = PageResult<ContainsLink>;

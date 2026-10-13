@@ -40,7 +40,7 @@ export function getDemoImportExportById(id: string) {
  * @param reqDemoImportExport 请求参数
  */
 export function exportDemo(reqDemoImportExport?: ReqDemoImportExport) {
-  return defHttp.download({ url: Api.DemoImportExport + "/export", params: reqDemoImportExport });
+  return defHttp.download({ url: `${Api.DemoImportExport}/export`, params: reqDemoImportExport });
 }
 
 /**
@@ -48,7 +48,7 @@ export function exportDemo(reqDemoImportExport?: ReqDemoImportExport) {
  * @param id 记录id
  */
 export function exportDemoTemplateExport(id?: string) {
-  return defHttp.download({ url: Api.DemoImportExport + "/export/" + id });
+  return defHttp.download({ url: `${Api.DemoImportExport}/export/${id}` });
 }
 
 /**
@@ -94,7 +94,7 @@ export function deleteDemoImportExport(id: string) {
  * @return 返回结果
  */
 export function deleteBatchDemoImportExport(ids: string) {
-  return defHttp.delete<boolean>({ url: Api.DemoImportExport + "/batch/" + ids }, { successMessageMode: "message" });
+  return defHttp.delete<boolean>({ url: `${Api.DemoImportExport}/batch/${ids}` }, { successMessageMode: "message" });
 }
 
 /**
@@ -104,8 +104,8 @@ export function deleteBatchDemoImportExport(ids: string) {
 export function importDemo(file) {
   return defHttp.upload<any>(
     {
-      url: Api.DemoImportExport + "/import",
-      params: { file: file }
+      url: `${Api.DemoImportExport}/import`,
+      params: { file }
     },
     { successMessageMode: "message" }
   );

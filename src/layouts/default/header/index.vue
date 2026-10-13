@@ -26,7 +26,7 @@
 
     <!-- action  -->
     <div :class="`${prefixCls}-action`">
-      <TenantDropDown :theme="getHeaderTheme" />
+      <TenantDropDown v-if="getShowTenant" :theme="getHeaderTheme" />
       <UserDropDown :theme="getHeaderTheme" />
       <Divider type="vertical" />
       <AppSearch :class="`${prefixCls}-action__item `" v-if="getShowSearch" />
@@ -76,6 +76,7 @@
     getHeaderTheme,
     getShowFullScreen,
     getShowNotice,
+    getShowTenant,
     getShowContent,
     getShowBread,
     getShowHeaderLogo,

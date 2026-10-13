@@ -17,7 +17,7 @@ export const columns: BasicColumn[] = [
     title: "",
     dataIndex: "name",
     width: 120
-  },
+  }
 ];
 export const searchFormSchema: FormSchema[] = [
   {
@@ -25,7 +25,7 @@ export const searchFormSchema: FormSchema[] = [
     label: "",
     component: "Input",
     colProps: { xl: 5, md: 6 }
-  },
+  }
 ];
 export const folderFormSchema: FormSchema[] = [
   {
@@ -37,13 +37,13 @@ export const folderFormSchema: FormSchema[] = [
   {
     field: "type",
     label: "",
-    component: "Input",
+    component: "Input"
   },
   {
     field: "name",
     label: "",
-    component: "Input",
-  },
+    component: "Input"
+  }
 ];
 
 export class FolderDesc {
@@ -60,6 +60,6 @@ export class FolderDesc {
     {
       field: "name",
       label: ""
-    },
+    }
   ];
 }

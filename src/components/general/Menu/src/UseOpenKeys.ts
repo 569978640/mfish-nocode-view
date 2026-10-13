@@ -25,10 +25,10 @@ export function useOpenKeys(
         menuState.openKeys = [];
         return;
       }
-      if (!unref(accordion)) {
-        menuState.openKeys = uniq([...menuState.openKeys, ...getAllParentPath(menuList, path)]);
-      } else {
+      if (unref(accordion)) {
         menuState.openKeys = getAllParentPath(menuList, path);
+      } else {
+        menuState.openKeys = uniq([...menuState.openKeys, ...getAllParentPath(menuList, path)]);
       }
     };
     if (native) {
@@ -64,15 +64,15 @@ export function useOpenKeys(
           rootSubMenuKeys.push(path);
         }
       }
-      if (!unref(getCollapsed)) {
-        const latestOpenKey = openKeys.find((key) => menuState.openKeys.indexOf(key) === -1);
-        if (rootSubMenuKeys.indexOf(latestOpenKey as string) === -1) {
-          menuState.openKeys = openKeys;
-        } else {
-          menuState.openKeys = latestOpenKey ? [latestOpenKey] : [];
-        }
-      } else {
+      if (unref(getCollapsed)) {
         menuState.collapsedOpenKeys = openKeys;
+      } else {
+        const latestOpenKey = openKeys.find((key) => !menuState.openKeys.includes(key));
+        if (rootSubMenuKeys.includes(latestOpenKey as string)) {
+          menuState.openKeys = latestOpenKey ? [latestOpenKey] : [];
+        } else {
+          menuState.openKeys = openKeys;
+        }
       }
     }
   }

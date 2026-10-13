@@ -13,6 +13,7 @@ import {
 import { AppDarkModeToggle } from "@/components/general/Application";
 import { MenuModeEnum, MenuTypeEnum, TriggerEnum } from "@mfish/core/enums";
 import { useHeaderSetting, useI18n, useMenuSetting, useMultipleTabSetting, useRootSetting } from "@mfish/core/hooks";
+import { useUserStore } from "@mfish/stores/modules";
 import { baseHandler } from "./Handler";
 import {
   contentModeOptions,
@@ -27,6 +28,7 @@ import {
   HEADER_PRESET_BG_COLOR_LIST,
   SIDE_BAR_BG_COLOR_LIST
 } from "@mfish/core/settings/DesignSetting";
+import projectSetting from "@mfish/core/settings/ProjectSetting";
 
 const { t } = useI18n();
 
@@ -44,7 +46,8 @@ export default defineComponent({
       getGrayMode,
       getLockTime,
       getShowDarkModeToggle,
-      getThemeColor
+      getThemeColor,
+      getShowSettingButton
     } = useRootSetting();
 
     const {
@@ -68,13 +71,23 @@ export default defineComponent({
       getMixSideFixed
     } = useMenuSetting();
 
-    const { getShowHeader, getFixed: getHeaderFixed, getHeaderBgColor, getShowSearch } = useHeaderSetting();
+    const {
+      getShowHeader,
+      getFixed: getHeaderFixed,
+      getHeaderBgColor,
+      getShowSearch,
+      getShowNotice,
+      getShowTenant
+    } = useHeaderSetting();
 
     const { getShowMultipleTab, getShowQuick, getShowRedo, getShowFold } = useMultipleTabSetting();
 
     const getShowMenuRef = computed(() => {
       return unref(getShowMenu) && !unref(getIsHorizontal);
     });
+
+    const userStore = useUserStore();
+    const isAdmin = computed(() => userStore.getUserInfo?.account === "admin");
 
     function renderSidebar() {
       return (
@@ -306,6 +319,24 @@ export default defineComponent({
           />
 
           <SwitchItem title={t("layout.setting.header")} event={HandlerEnum.HEADER_SHOW} def={unref(getShowHeader)} />
+          <SwitchItem
+            title='消息通知'
+            event={HandlerEnum.HEADER_NOTICE}
+            def={unref(getShowNotice)}
+            v-show={unref(getShowHeader) && projectSetting.headerSetting.showNotice === "readDB" && !unref(isAdmin)}
+          />
+          <SwitchItem
+            title='租户切换'
+            event={HandlerEnum.HEADER_TENANT}
+            def={unref(getShowTenant)}
+            v-show={unref(getShowHeader) && projectSetting.headerSetting.showTenant === "readDB" && !unref(isAdmin)}
+          />
+          <SwitchItem
+            title='项目配置'
+            event={HandlerEnum.SHOW_SETTING_BUTTON}
+            def={unref(getShowSettingButton)}
+            v-show={unref(getShowHeader) && projectSetting.showSettingButton === "readDB" && !unref(isAdmin)}
+          />
           <SwitchItem
             title='Logo'
             event={HandlerEnum.SHOW_LOGO}
