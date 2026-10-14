@@ -1,6 +1,7 @@
 <template>
   <div class="h-full w-full p-4 bg-white flex flex-col">
-    <div v-if="!currentConfig" class="flex flex-col h-full">
+    <!-- 视图一：分类标签 + 产品系列卡片列表 -->
+    <div v-if="currentView === 'list'" class="flex flex-col h-full">
       <!-- 顶部分类标签导航区 -->
       <ATabs v-model:active-key="activeCategory" @change="handleCategoryChange">
         <ATabPane v-for="cat in categoryList" :key="cat.id" :tab="cat.displayName || cat.name" />
@@ -17,7 +18,7 @@
                   style="height: 300px"
                 >
                   <img
-                    :src="series.imageUrl"
+                    :src="series.imageUrl || defaultImg"
                     :alt="series.name"
                     style="max-width: 100%; max-height: 100%; object-fit: contain"
                   />
@@ -31,34 +32,46 @@
                 </template>
               </ACardMeta>
               <template #actions>
-                <AButton type="link" @click="handleConfig(series)">参数配置</AButton>
-                <!-- 系列编辑为预留功能：后端保存接口未就绪，入口置灰，编辑弹窗代码保留 -->
-                <AButton type="link" disabled title="功能暂未开放" @click="handleEdit(series)">编辑</AButton>
+                <AButton type="link" @click="openConfig(series)">参数配置</AButton>
+                <AButton type="link" @click="openFamilyTree(series)">产品家谱</AButton>
               </template>
             </ACard>
           </ACol>
         </ARow>
         <AEmpty v-if="seriesList.length === 0" description="暂无产品系列" />
       </div>
-
-      <!-- 产品系列信息维护弹窗 -->
-      <SeriesModal @register="registerModal" @success="loadSeries" />
     </div>
 
-    <!-- 产品参数配置详情区：firstCategory 取二级分类 parentDisplayName，secondCategory 取二级分类显示名，productClassification 取二级分类原始 name -->
+    <!-- 视图二：产品参数配置详情：firstCategory 取二级分类 parentDisplayName，secondCategory 取二级分类显示名，productClassification 取二级分类原始 name -->
     <ParameterConfig
-      v-else
+      v-if="currentView === 'config'"
       :first-category="currentConfig.firstCategory"
       :second-category="currentConfig.secondCategory"
       :product-classification="currentConfig.productClassification"
-      @back="currentConfig = null"
+      :initial-detail-part="pendingDetailPart"
+      @back="handleConfigBack"
+    />
+
+    <!--
+      视图三：产品家谱（部件逐代衍生树），productClassification 为二级分类内部名，作为家谱接口入参。
+      用 v-show 常驻缓存而非 v-if：点击部件编号进入详情再返回时组件不销毁，画布与已加载家谱数据保留、不重复请求；
+      是否重新拉取由 reloadKey 令牌决定：列表点"产品家谱"递增令牌必刷新，详情返回不递增则保持原状。
+    -->
+    <ProductFamilyTree
+      v-show="currentView === 'family'"
+      :active="currentView === 'family'"
+      :reload-key="familyReloadKey"
+      :first-category="currentConfig.firstCategory"
+      :second-category="currentConfig.secondCategory"
+      :product-classification="currentConfig.productClassification"
+      @back="currentView = 'list'"
+      @part-click="openPartDetailFromFamily"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
   defineOptions({ name: "TLAArchitecture" });
-  import { ref, onMounted } from "vue";
   import {
     Tabs as ATabs,
     TabPane as ATabPane,
@@ -69,62 +82,28 @@
     Empty as AEmpty,
     Button as AButton
   } from "ant-design-vue";
-  import { useModal } from "@mfish/core/components/Modal";
-  import SeriesModal from "./components/SeriesModal.vue";
   import ParameterConfig from "./components/ParameterConfig.vue";
-  import { tlaApi } from "@/api/pbi/tla";
-  import type { TlaCategory, TlaSeries } from "@/api/pbi/model/TlaModel";
+  import ProductFamilyTree from "./components/ProductFamilyTree.vue";
+  // 系列编辑弹窗：编辑入口已下线（后端保存接口未就绪），组件文件保留，接口就绪后在卡片 actions 重新挂载
+  // import SeriesModal from "./components/SeriesModal.vue";
+  // 系列卡片无图时的默认兜底图（API 层不感知视图资源，空地址在此层兜底）
+  import defaultImg from "./image/default.png";
+  import { useTlaArchitecture } from "./hooks/useTlaArchitecture";
 
-  const categoryList = ref<TlaCategory[]>([]);
-  const activeCategory = ref<string>("");
-  const seriesList = ref<TlaSeries[]>([]);
-
-  // 当前进入参数配置的分类信息：一级分类取二级分类的 parentDisplayName，二级分类取其显示名，产品分类取二级分类原始 name
-  const currentConfig = ref<{
-    firstCategory: string;
-    secondCategory: string;
-    productClassification: string;
-  } | null>(null);
-
-  const [registerModal, { openModal }] = useModal();
-
-  const loadCategories = async () => {
-    categoryList.value = await tlaApi.getCategoryList();
-    if (categoryList.value.length > 0) {
-      activeCategory.value = categoryList.value[0].id;
-      loadSeries();
-    }
-  };
-
-  const loadSeries = async () => {
-    if (!activeCategory.value) return;
-    seriesList.value = await tlaApi.getSeriesList(activeCategory.value);
-  };
-
-  const handleCategoryChange = (key: any) => {
-    activeCategory.value = key;
-    loadSeries();
-  };
-
-  // 点击参数配置：一级分类取 parentDisplayName，二级分类标题取显示名 displayName，productClassification 取二级分类内部名称 name
-  const handleConfig = (series: TlaSeries) => {
-    currentConfig.value = {
-      firstCategory: series.parentDisplayName || series.parentName || "",
-      secondCategory: series.displayName || series.name,
-      productClassification: series.name
-    };
-  };
-
-  const handleEdit = (record: TlaSeries) => {
-    openModal(true, {
-      isUpdate: true,
-      record
-    });
-  };
-
-  onMounted(() => {
-    loadCategories();
-  });
+  const {
+    categoryList,
+    activeCategory,
+    seriesList,
+    currentView,
+    currentConfig,
+    pendingDetailPart,
+    familyReloadKey,
+    handleCategoryChange,
+    openConfig,
+    openFamilyTree,
+    openPartDetailFromFamily,
+    handleConfigBack
+  } = useTlaArchitecture();
 </script>
 
 <style lang="less" scoped>

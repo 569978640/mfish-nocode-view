@@ -1,5 +1,5 @@
 import { computed, onBeforeUnmount, onMounted, ref, type Ref } from "vue";
-import type { PbiParamConfigItem, PbiPart } from "@/api/pbi/model/TlaModel";
+import type { PbiParamConfigItem, PbiPart } from "@/api/pbi/model";
 import { getAttrValue, isEmptyValue } from "../utils/partValue";
 
 /** 属性组视图模型 */

@@ -1,11 +1,10 @@
 import { h, onMounted, ref, watch, type Ref } from "vue";
 import { Input as AInput } from "ant-design-vue";
 import { tlaApi } from "@/api/pbi/tla";
-import type { PbiPart } from "@/api/pbi/model/TlaModel";
-import type { PbiClassificationProps } from "./usePbiData";
+import type { PbiPart, PbiClassificationProps } from "@/api/pbi/model";
 
 /** 竞品级联节点 */
-interface CompetitorOption {
+export interface CompetitorOption {
   /** 节点值：一级/二级为分类内部 name，叶子为接口返回的"编号,名称" */
   value: string;
   /** 节点展示文本：分类显示名 / 叶子部件编号 */
@@ -24,6 +23,9 @@ interface CompetitorOption {
   rawLeaves?: CompetitorOption[];
   children?: CompetitorOption[];
 }
+
+/** 级联弹层自定义渲染函数类型（菜单外层容器 + 第三列顶部产品搜索框） */
+export type CompetitorDropdownRender = (args: { menuNode?: unknown }) => ReturnType<typeof h>;
 
 interface UseCompetitorCascaderOptions {
   props: PbiClassificationProps;

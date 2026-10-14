@@ -1,5 +1,12 @@
 import { ref } from "vue";
-import type { PbiPart } from "@/api/pbi/model/TlaModel";
+import type { PbiPart } from "@/api/pbi/model";
+
+/**
+ * 型号对比标签/标题统一文案：编号, 名称（名称为空时只显示编号）。
+ * 纯函数，供 hook 返回与对比面板组件直接复用。
+ */
+export const formatCompareLabel = (part: PbiPart): string =>
+  part.name ? `${part.wtPartNumber}, ${part.name}` : part.wtPartNumber;
 
 /**
  * 型号对比集与对比模式管理：
@@ -57,10 +64,6 @@ export const usePartCompare = () => {
     comparing.value = false;
     compareParts.value = [];
   };
-
-  /** 型号对比标签/标题统一文案：编号, 名称（名称为空时只显示编号） */
-  const formatCompareLabel = (part: PbiPart): string =>
-    part.name ? `${part.wtPartNumber}, ${part.name}` : part.wtPartNumber;
 
   return {
     compareParts,

@@ -1,4 +1,4 @@
-import type { PbiPart } from "@/api/pbi/model/TlaModel";
+import type { PbiPart } from "@/api/pbi/model";
 
 /**
  * 属性值是否为空：null、undefined、空串及纯空白字符串均视为空

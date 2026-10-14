@@ -1,17 +1,7 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import { tlaApi } from "@/api/pbi/tla";
-import type { PbiFilterProperty, PbiParamConfigItem, PbiPart } from "@/api/pbi/model/TlaModel";
-
-/**
- * 分类入参：一级分类显示名称 + 二级分类内部名称
- */
-export interface PbiClassificationProps {
-  firstCategory: string;
-  productClassification: string;
-}
-
-/** 判断筛选条件是否为下拉多选型（接口返回了可选值） */
-export const isSelectFilter = (prop: PbiFilterProperty): boolean => !!(prop.values && prop.values.length > 0);
+import type { PbiClassificationProps, PbiFilterProperty, PbiParamConfigItem, PbiPart } from "@/api/pbi/model";
+import { isSelectFilter } from "../utils/filter";
 
 /**
  * PBI参数配置页数据加载：

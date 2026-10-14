@@ -1,13 +1,13 @@
 import { computed, type Ref } from "vue";
-import type { PbiFilterProperty, PbiParamConfigItem, PbiPart } from "@/api/pbi/model/TlaModel";
+import type { PbiFilterProperty, PbiParamConfigItem, PbiPart } from "@/api/pbi/model";
 import { getAttrValue, isEmptyValue } from "../utils/partValue";
+import { isSelectFilter } from "../utils/filter";
 
 interface UsePartFilterOptions {
   configList: Ref<PbiParamConfigItem[]>;
   partList: Ref<PbiPart[]>;
   filterProperties: Ref<PbiFilterProperty[]>;
   filterValues: Record<string, string | string[]>;
-  isSelectFilter: (prop: PbiFilterProperty) => boolean;
 }
 
 /**
@@ -17,7 +17,7 @@ interface UsePartFilterOptions {
  * 筛选属性在属性配置中找不到对应列名时，该条件不参与过滤。
  */
 export const usePartFilter = (options: UsePartFilterOptions) => {
-  const { configList, partList, filterProperties, filterValues, isSelectFilter } = options;
+  const { configList, partList, filterProperties, filterValues } = options;
 
   /** 筛选属性 name（即 internalName） → 部件属性列名 columnName 映射 */
   const internalNameColumnMap = computed(() => {
@@ -39,8 +39,14 @@ export const usePartFilter = (options: UsePartFilterOptions) => {
     return typeof value === "string" ? value : "";
   };
 
-  /** 输入框型条件的值写入 */
-  const setTextValue = (name: string, value: string) => {
+  /** 下拉多选型条件的值读取（联合类型下保证 ASelect multiple 拿到 string[]） */
+  const getMultiValue = (name: string): string[] => {
+    const value = filterValues[name];
+    return Array.isArray(value) ? value : [];
+  };
+
+  /** 筛选条件统一写入：下拉多选写 string[]，输入框写 string */
+  const setFilterValue = (name: string, value: string | string[]) => {
     filterValues[name] = value;
   };
 
@@ -80,7 +86,8 @@ export const usePartFilter = (options: UsePartFilterOptions) => {
     internalNameColumnMap,
     buildSelectOptions,
     getTextValue,
-    setTextValue,
+    getMultiValue,
+    setFilterValue,
     resetFilters
   };
 };
