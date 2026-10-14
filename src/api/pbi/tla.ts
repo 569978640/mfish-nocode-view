@@ -10,6 +10,11 @@ import { defHttp } from "@mfish/core/utils/http/axios";
 import defaultImg from "@/views/pbi/TLA-Architecture/image/default.png";
 
 /**
+ * PBI接口统一前缀（网关路由到mf-bfces服务的/pbi控制器）
+ */
+const BASE_URL = "/bfces/pbi";
+
+/**
  * @description PBI/TLA 架构接口
  */
 export const tlaApi = {
@@ -17,7 +22,7 @@ export const tlaApi = {
    * 获取一级分类列表
    */
   async getCategoryList() {
-    const list = await defHttp.get<TlaCategory[]>({ url: "/bfces/pbi/node1" });
+    const list = await defHttp.get<TlaCategory[]>({ url: `${BASE_URL}/node1` });
     return list.map((item) => ({
       ...item,
       id: item.name // 后端未返回 id，使用 name 作为前端唯一标识
@@ -28,7 +33,10 @@ export const tlaApi = {
    * 根据一级分类获取产品系列（二级分类）列表
    */
   async getSeriesList(categoryId: string) {
-    const list = await defHttp.get<TlaCategory[]>({ url: "/bfces/pbi/node2", params: { parentNodeName: categoryId } });
+    const list = await defHttp.get<TlaCategory[]>({
+      url: `${BASE_URL}/node2`,
+      params: { parentNodeName: categoryId }
+    });
     return list.map(
       (item) =>
         ({
@@ -46,7 +54,8 @@ export const tlaApi = {
 
   /**
    * 保存或更新产品系列
-   * 真实场景下调用后端保存接口
+   * @deprecated 后端系列维护接口尚未提供，当前为本地假实现，数据不会持久化；
+   * 待后端接口就绪后替换为真实 POST/PUT 调用，并恢复页面上的“编辑”入口
    */
   saveSeries(_data: TlaSeriesForm) {
     return Promise.resolve(true);
@@ -58,7 +67,7 @@ export const tlaApi = {
    */
   async getParamConfig(firstCategory: string) {
     return await defHttp.get<PbiParamConfigItem[]>({
-      url: "/bfces/pbi/paramConfig",
+      url: `${BASE_URL}/paramConfig`,
       params: { firstCategory }
     });
   },
@@ -70,7 +79,7 @@ export const tlaApi = {
    */
   async getPartsByClassification(firstCategory: string, productClassification: string) {
     return await defHttp.get<PbiPart[]>({
-      url: "/bfces/pbi/part",
+      url: `${BASE_URL}/part`,
       params: { firstCategory, productClassification }
     });
   },
@@ -83,7 +92,7 @@ export const tlaApi = {
    */
   async getPartOptions(firstCategory: string, productClassification: string) {
     return await defHttp.get<string[]>({
-      url: "/bfces/pbi/partOptions",
+      url: `${BASE_URL}/partOptions`,
       params: { firstCategory, productClassification }
     });
   },
@@ -94,7 +103,7 @@ export const tlaApi = {
    */
   async getFilterProperties(nodeName?: string) {
     return await defHttp.get<PbiFilterProperty[]>({
-      url: "/bfces/pbi/filterProperties",
+      url: `${BASE_URL}/filterProperties`,
       params: { nodeName }
     });
   }

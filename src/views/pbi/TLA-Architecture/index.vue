@@ -32,7 +32,8 @@
               </ACardMeta>
               <template #actions>
                 <AButton type="link" @click="handleConfig(series)">参数配置</AButton>
-                <AButton type="link" @click="handleEdit(series)">编辑</AButton>
+                <!-- 系列编辑为预留功能：后端保存接口未就绪，入口置灰，编辑弹窗代码保留 -->
+                <AButton type="link" disabled title="功能暂未开放" @click="handleEdit(series)">编辑</AButton>
               </template>
             </ACard>
           </ACol>
@@ -44,10 +45,11 @@
       <SeriesModal @register="registerModal" @success="loadSeries" />
     </div>
 
-    <!-- 产品参数配置详情区：firstCategory 取二级分类 parentDisplayName，productClassification 取二级分类原始 name -->
+    <!-- 产品参数配置详情区：firstCategory 取二级分类 parentDisplayName，secondCategory 取二级分类显示名，productClassification 取二级分类原始 name -->
     <ParameterConfig
       v-else
       :first-category="currentConfig.firstCategory"
+      :second-category="currentConfig.secondCategory"
       :product-classification="currentConfig.productClassification"
       @back="currentConfig = null"
     />
@@ -77,8 +79,12 @@
   const activeCategory = ref<string>("");
   const seriesList = ref<TlaSeries[]>([]);
 
-  // 当前进入参数配置的分类信息：一级分类取二级分类的 parentDisplayName，产品分类取二级分类原始 name
-  const currentConfig = ref<{ firstCategory: string; productClassification: string } | null>(null);
+  // 当前进入参数配置的分类信息：一级分类取二级分类的 parentDisplayName，二级分类取其显示名，产品分类取二级分类原始 name
+  const currentConfig = ref<{
+    firstCategory: string;
+    secondCategory: string;
+    productClassification: string;
+  } | null>(null);
 
   const [registerModal, { openModal }] = useModal();
 
@@ -100,10 +106,11 @@
     loadSeries();
   };
 
-  // 点击参数配置：firstCategory 取二级分类的 parentDisplayName，productClassification 取二级分类内部名称 name
+  // 点击参数配置：一级分类取 parentDisplayName，二级分类标题取显示名 displayName，productClassification 取二级分类内部名称 name
   const handleConfig = (series: TlaSeries) => {
     currentConfig.value = {
       firstCategory: series.parentDisplayName || series.parentName || "",
+      secondCategory: series.displayName || series.name,
       productClassification: series.name
     };
   };
