@@ -18,6 +18,30 @@ export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
   router.beforeEach(async (to, from) => {
+    // 外部系统免登跳转：URL 中携带 access_token 时（如旧 JSP 系统通过 password 模式换取令牌后 302 跳转），
+    // 先写入本地令牌缓存并拉取用户信息、动态注册路由，校验通过后清除地址栏令牌参数再继续跳转
+    const ssoAccessToken = to.query?.access_token as string;
+    if (ssoAccessToken) {
+      userStore.setToken(ssoAccessToken);
+      const ssoRefreshToken = to.query?.refresh_token as string;
+      if (ssoRefreshToken) {
+        userStore.setRefreshToken(ssoRefreshToken);
+      }
+      try {
+        // 拉取用户信息并动态注册路由，同时完成令牌有效性校验
+        await userStore.getAccountInfo();
+      } catch {
+        // 令牌无效：清空缓存并回落到正常登录页，redirect 不能再携带令牌参数避免死循环
+        userStore.setToken(undefined);
+        userStore.setRefreshToken(undefined);
+        return { path: PageEnum.BASE_LOGIN, replace: true };
+      }
+      // 清除地址栏中的令牌参数，避免令牌残留在浏览器历史、截图与刷新重复写入
+      const cleanQuery = { ...to.query };
+      delete cleanQuery.access_token;
+      delete cleanQuery.refresh_token;
+      return { path: to.path, query: cleanQuery, hash: to.hash, replace: true };
+    }
     const token = userStore.getToken;
     const refreshToken = userStore.getRefreshToken;
     if (!token && refreshToken) {
