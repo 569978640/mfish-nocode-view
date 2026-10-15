@@ -89,7 +89,7 @@ export interface ProjectConfig {
   // Storage location of permission related information
   permissionCacheType: CacheTypeEnum;
   // Whether to show the configuration button
-  showSettingButton: boolean | "readDB";
+  showSettingButton: boolean;
   // Whether to show the theme switch button
   showDarkModeToggle: boolean;
   // Configure where the button is displayed
@@ -142,6 +142,7 @@ export interface ProjectConfig {
 export interface HeaderSetting {
   bgColor: string;
   fixed: boolean;
+  // 是否显示顶栏：普通用户固定隐藏，管理员读数据库配置控制
   show: boolean;
   theme: ThemeEnum;
   // Turn on full screen
@@ -151,9 +152,9 @@ export interface HeaderSetting {
   // Show document button
   showDoc: boolean;
   // Show message center button
-  showNotice: boolean | "readDB";
+  showNotice: boolean;
   // Show tenant dropdown
-  showTenant: boolean | "readDB";
+  showTenant: boolean;
   showSearch: boolean;
 }
 
@@ -163,6 +164,7 @@ export interface MenuSetting {
   collapsed: boolean;
   siderHidden: boolean;
   canDrag: boolean;
+  // Whether to show no dom
   show: boolean;
   hidden: boolean;
   split: boolean;

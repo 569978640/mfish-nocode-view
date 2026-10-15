@@ -8,7 +8,8 @@
       </ATabs>
 
       <!-- 产品系列卡片列表区 -->
-      <div class="mfish-page-content mt-4 flex-1 overflow-auto">
+      <!--div class="mfish-page-content mt-4 flex-1 overflow-auto" -->
+      <div class="mfish-page-content mt-4 flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         <ARow :gutter="16">
           <ACol :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="series in seriesList" :key="series.id">
             <ACard hoverable class="mb-4">

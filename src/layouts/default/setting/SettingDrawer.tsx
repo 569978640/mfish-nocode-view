@@ -28,7 +28,6 @@ import {
   HEADER_PRESET_BG_COLOR_LIST,
   SIDE_BAR_BG_COLOR_LIST
 } from "@mfish/core/settings/DesignSetting";
-import projectSetting from "@mfish/core/settings/ProjectSetting";
 
 const { t } = useI18n();
 
@@ -46,8 +45,7 @@ export default defineComponent({
       getGrayMode,
       getLockTime,
       getShowDarkModeToggle,
-      getThemeColor,
-      getShowSettingButton
+      getThemeColor
     } = useRootSetting();
 
     const {
@@ -86,6 +84,7 @@ export default defineComponent({
       return unref(getShowMenu) && !unref(getIsHorizontal);
     });
 
+    // 顶栏/消息通知/租户切换仅管理员可配置
     const userStore = useUserStore();
     const isAdmin = computed(() => userStore.getUserInfo?.account === "admin");
 
@@ -172,7 +171,7 @@ export default defineComponent({
             title={t("layout.setting.menuCollapse")}
             event={HandlerEnum.MENU_COLLAPSED}
             def={unref(getCollapsed)}
-            v-show={unref(getShowMenuRef)}
+            v-show={unref(getShowMenuRef) && unref(isAdmin)}
           />
 
           <SwitchItem
@@ -318,24 +317,23 @@ export default defineComponent({
             v-show={!unref(getIsHorizontal)}
           />
 
-          <SwitchItem title={t("layout.setting.header")} event={HandlerEnum.HEADER_SHOW} def={unref(getShowHeader)} />
+          <SwitchItem
+            title={t("layout.setting.header")}
+            event={HandlerEnum.HEADER_SHOW}
+            def={unref(getShowHeader)}
+            v-show={unref(isAdmin)}
+          />
           <SwitchItem
             title='消息通知'
             event={HandlerEnum.HEADER_NOTICE}
             def={unref(getShowNotice)}
-            v-show={unref(getShowHeader) && projectSetting.headerSetting.showNotice === "readDB" && !unref(isAdmin)}
+            v-show={unref(isAdmin) && unref(getShowHeader)}
           />
           <SwitchItem
             title='租户切换'
             event={HandlerEnum.HEADER_TENANT}
             def={unref(getShowTenant)}
-            v-show={unref(getShowHeader) && projectSetting.headerSetting.showTenant === "readDB" && !unref(isAdmin)}
-          />
-          <SwitchItem
-            title='项目配置'
-            event={HandlerEnum.SHOW_SETTING_BUTTON}
-            def={unref(getShowSettingButton)}
-            v-show={unref(getShowHeader) && projectSetting.showSettingButton === "readDB" && !unref(isAdmin)}
+            v-show={unref(isAdmin) && unref(getShowHeader)}
           />
           <SwitchItem
             title='Logo'

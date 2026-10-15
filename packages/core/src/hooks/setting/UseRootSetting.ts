@@ -24,9 +24,8 @@ export function useRootSetting() {
 
   const getShowSettingButton = computed(() => {
     const userStore = useUserStore();
-    if (userStore.getUserInfo?.account === "admin") return true;
-    const setting = appStore.getProjectConfig.showSettingButton;
-    return setting === "readDB" ? true : setting;
+    // 设置入口仅管理员可见且常驻，保证管理员始终能打开界面设置；普通用户固定隐藏
+    return userStore.getUserInfo?.account === "admin";
   });
 
   const getUseErrorHandle = computed(() => appStore.getProjectConfig.useErrorHandle);

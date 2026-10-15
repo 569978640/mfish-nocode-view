@@ -14,7 +14,7 @@ import { APP_PRESET_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST, SIDE_BAR_BG_COLOR_L
 
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
-  // Whether to show the configuration button
+  // 是否显示配置按钮（设置入口）：仅管理员可见，普通用户固定隐藏
   showSettingButton: false,
 
   // Whether to show the theme switch button
@@ -50,14 +50,14 @@ const setting: ProjectConfig = {
   // Whether to show footer
   showFooter: false,
 
-  // Header configuration  true/false/"readDB"
+  // Header configuration
   headerSetting: {
     // header bg color
     bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
     // Fixed at the top
     fixed: true,
-    // Whether to show top
-    show: true,
+    // 是否显示顶栏：普通用户固定隐藏，管理员读数据库配置控制，默认隐藏
+    show: false,
     // theme
     theme: ThemeEnum.LIGHT,
     // Whether to enable the lock screen function
@@ -66,9 +66,9 @@ const setting: ProjectConfig = {
     showFullScreen: true,
     // Whether to show the document button
     showDoc: false,
-    // Whether to show the notification button
+    // 是否显示消息通知按钮：普通用户固定隐藏，管理员读数据库配置控制，默认隐藏
     showNotice: false,
-    // Whether to show the tenant dropdown
+    // 是否显示租户切换：普通用户固定隐藏，管理员读数据库配置控制，默认隐藏
     showTenant: false,
     // Whether to display the menu search
     showSearch: true

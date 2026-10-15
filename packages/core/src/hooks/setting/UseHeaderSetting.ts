@@ -35,7 +35,12 @@ export function useHeaderSetting() {
 
   const getHeaderTheme = computed(() => appStore.getHeaderSetting.theme);
 
-  const getShowHeader = computed(() => appStore.getHeaderSetting.show);
+  const getShowHeader = computed(() => {
+    const userStore = useUserStore();
+    // 普通用户固定隐藏顶栏；管理员读数据库配置控制
+    if (userStore.getUserInfo?.account !== "admin") return false;
+    return appStore.getHeaderSetting.show;
+  });
 
   const getFixed = computed(() => appStore.getHeaderSetting.fixed);
 
@@ -49,16 +54,16 @@ export function useHeaderSetting() {
 
   const getShowNotice = computed(() => {
     const userStore = useUserStore();
-    if (userStore.getUserInfo?.account === "admin") return true;
-    const setting = appStore.getHeaderSetting.showNotice;
-    return setting === "readDB" ? true : setting;
+    // 普通用户固定隐藏消息通知；管理员读数据库配置控制
+    if (userStore.getUserInfo?.account !== "admin") return false;
+    return appStore.getHeaderSetting.showNotice;
   });
 
   const getShowTenant = computed(() => {
     const userStore = useUserStore();
-    if (userStore.getUserInfo?.account === "admin") return true;
-    const setting = appStore.getHeaderSetting.showTenant;
-    return setting === "readDB" ? true : setting !== false;
+    // 普通用户固定隐藏租户切换；管理员读数据库配置控制
+    if (userStore.getUserInfo?.account !== "admin") return false;
+    return appStore.getHeaderSetting.showTenant;
   });
 
   const getShowBread = computed(() => {
