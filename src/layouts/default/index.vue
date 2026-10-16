@@ -24,8 +24,13 @@
   import { useDesign, useHeaderSetting, useMenuSetting } from "@mfish/core/hooks";
   import { useLockPage } from "@/hooks/UseLockPage";
   import { useAppInject } from "@/hooks/UseAppInject";
+  import { setupTlaHomeTab } from "@/views/pbi/tla/hooks/useTlaTabs";
 
   defineOptions({ name: "DefaultLayout" });
+
+  // PBI/TLA：固定首页标签（不可关闭、keepAlive），并保证浏览器刷新落在业务子标签时回到首页标签。
+  // 必须在本布局 setup（先于多标签组件子节点初始化）同步执行一次。
+  setupTlaHomeTab();
 
   const LayoutFeatures = createAsyncComponent(() => import("@/layouts/default/feature/index.vue"));
   const LayoutFooter = createAsyncComponent(() => import("@/layouts/default/footer/index.vue"));

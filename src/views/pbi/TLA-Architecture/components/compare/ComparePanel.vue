@@ -31,7 +31,9 @@
     <div v-if="!comparing && !isDetail" class="compare-section">
       <div class="compare-section-title">型号对比</div>
       <!-- 已选对比部件：未选时显示操作提示 -->
-      <div v-if="compareParts.length === 0" class="compare-tip">点击表头【对比】或选择竞品添加型号进行对比</div>
+      <div v-if="(compareParts ?? []).length === 0" class="compare-tip">
+        点击表头【对比】或选择竞品添加型号进行对比
+      </div>
       <div v-else class="compare-tags">
         <div v-for="part in compareParts" :key="part.wtPartNumber" class="compare-tag">
           <span class="compare-tag-name" :title="formatCompareLabel(part)">{{ formatCompareLabel(part) }}</span>
@@ -44,11 +46,14 @@
         class="compare-cascader"
         size="small"
         placeholder="选择竞品"
-        :options="competitorTree"
-        :load-data="loadCompetitorData"
-        :dropdown-render="renderCompetitorDropdown"
+        :options="competitorTree ?? []"
+        :load-data="(loadCompetitorData ?? noopLoadData) as any"
+        :dropdown-render="(renderCompetitorDropdown ?? noopDropdownRender) as any"
         popup-class-name="competitor-cascader-popup"
-        @change="(value, selectedOptions) => emit('competitorChange', value, selectedOptions)"
+        @change="
+          (value, selectedOptions) =>
+            emit('competitorChange', value as string[], selectedOptions as CompetitorOption[])
+        "
         @dropdown-visible-change="(open: boolean) => emit('popupChange', open)"
       />
       <AButton
@@ -57,40 +62,58 @@
         danger
         block
         class="compare-start"
-        :disabled="compareParts.length < 2"
+        :disabled="(compareParts ?? []).length < 2"
         @click="emit('start')"
       >
         开始对比
       </AButton>
-      <div v-if="compareParts.length > 0" class="compare-clear" @click="emit('clear')">清空所选</div>
+      <div v-if="(compareParts ?? []).length > 0" class="compare-clear" @click="emit('clear')">
+        清空所选
+      </div>
     </div>
   </aside>
 </template>
 
 <script lang="ts" setup>
   defineOptions({ name: "PbiComparePanel" });
-  const props = defineProps<{
-    /** 当前表格展示的型号数量 */
-    count: number;
-    /** 是否产品详情模式（单列） */
-    isDetail: boolean;
-    /** 是否处于型号对比模式 */
-    comparing: boolean;
-    /** 左侧属性过滤开关（v-model） */
-    highlightDiff: boolean;
-    hideSame: boolean;
-    hideEmpty: boolean;
-    /** 已加入对比的部件 */
-    compareParts: PbiPart[];
-    /** 竞品级联当前选中路径（v-model） */
-    competitorPath: string[];
-    /** 竞品级联选项树 */
-    competitorTree: CompetitorOption[];
-    /** 级联懒加载回调 */
-    loadCompetitorData: (selectedOptions: CompetitorOption[]) => Promise<void>;
-    /** 级联弹层自定义渲染（注入产品搜索框） */
-    renderCompetitorDropdown: CompetitorDropdownRender;
-  }>();
+  // 详情/对比标签只使用部分开关与面板能力，故除对比集与竞品级联外给出业务默认值，
+  // 允许使用方按需只传当前模式真正需要的 props
+  const props = withDefaults(
+    defineProps<{
+      /** 当前表格展示的型号数量 */
+      count?: number;
+      /** 是否产品详情模式（单列） */
+      isDetail?: boolean;
+      /** 是否处于型号对比模式 */
+      comparing?: boolean;
+      /** 左侧属性过滤开关（v-model） */
+      highlightDiff?: boolean;
+      hideSame?: boolean;
+      hideEmpty?: boolean;
+      /** 已加入对比的部件 */
+      compareParts?: PbiPart[];
+      /**
+       * 竞品级联当前选中路径（v-model）。
+       * 仅参数配置标签需要竞品级联；型号对比/产品详情标签隐藏对比区，可不传。
+       */
+      competitorPath?: string[];
+      /** 竞品级联选项树（仅参数配置标签需要） */
+      competitorTree?: CompetitorOption[];
+      /** 级联懒加载回调（仅参数配置标签需要） */
+      loadCompetitorData?: (selectedOptions: CompetitorOption[]) => Promise<void>;
+      /** 级联弹层自定义渲染，注入产品搜索框（仅参数配置标签需要） */
+      renderCompetitorDropdown?: CompetitorDropdownRender;
+    }>(),
+    {
+      count: 0,
+      isDetail: false,
+      comparing: false,
+      highlightDiff: false,
+      hideSame: false,
+      hideEmpty: false,
+      compareParts: () => []
+    }
+  );
   const emit = defineEmits<{
     (e: "update:highlightDiff", value: boolean): void;
     (e: "update:hideSame", value: boolean): void;
@@ -110,9 +133,13 @@
 
   /** 级联选择路径双向绑定代理：读 props、写回父级 update 事件（保持与 Ref 直绑一致的 v-model 形态） */
   const competitorPathModel = computed<string[]>({
-    get: () => props.competitorPath,
+    get: () => props.competitorPath ?? [],
     set: (value) => emit("update:competitorPath", value)
   });
+
+  /** 型号对比/产品详情标签不传竞品级联回调时的空实现兜底（对比区不渲染，不会实际执行） */
+  const noopLoadData = async (): Promise<void> => {};
+  const noopDropdownRender = (() => null) as unknown as CompetitorDropdownRender;
 
   import { computed } from "vue";
   import { Button as AButton, Checkbox as ACheckbox, Cascader as ACascader } from "ant-design-vue";

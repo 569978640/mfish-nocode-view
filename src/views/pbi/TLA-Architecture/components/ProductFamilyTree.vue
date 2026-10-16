@@ -1,8 +1,7 @@
 <template>
   <div class="family-page h-full w-full bg-white flex flex-col p-4">
-    <!-- 顶部栏：返回系列列表 + 家谱标题 -->
+    <!-- 顶部栏：家谱标题（组件已独立为系统标签页，无返回按钮，关闭标签即返回首页） -->
     <div class="flex items-center gap-4 mb-3">
-      <AButton @click="emit('back')">返回</AButton>
       <h2 class="text-xl font-bold m-0">{{ pageTitle }}</h2>
     </div>
 
@@ -48,8 +47,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, watch } from "vue";
-  import { Button as AButton, Spin as ASpin, Empty as AEmpty, message } from "ant-design-vue";
+  import { computed, onMounted, ref } from "vue";
+  import { Spin as ASpin, Empty as AEmpty, message } from "ant-design-vue";
   import { VueFlow } from "@vue-flow/core";
   import { Controls } from "@vue-flow/controls";
   // Vue Flow 核心样式与缩放控件样式
@@ -69,18 +68,9 @@
     secondCategory: string;
     /** 二级分类内部名称（PRODUCTCLASSIFICATION），家谱接口入参 */
     productClassification: string;
-    /** 家谱视图是否当前展示：组件由 v-show 常驻缓存，仅激活时允许拉取，避免在其他视图产生多余请求 */
-    active: boolean;
-    /**
-     * 加载令牌：仅在系列列表点击"产品家谱"按钮时由父组件递增。
-     * 从产品详细信息页返回只切换显隐、不递增令牌，故保留画布与数据不重新加载；
-     * 每次从列表进入（含同一系列重复点击、切换其他系列）令牌变化，必定重新拉取。
-     */
-    reloadKey: number;
   }>();
   const emit = defineEmits<{
-    (e: "back"): void;
-    /** 点击节点部件编号：向上抛出部件编号，由页面跳转该部件的详细特性参数页 */
+    /** 点击节点部件编号：向上抛出部件编号，由页面打开该部件的"部件编号"系统标签 */
     (e: "part-click", wtPartNumber: string): void;
   }>();
 
@@ -123,20 +113,13 @@
   };
 
   /**
-   * 组件由页面以 v-show 常驻缓存（进入详情不销毁），加载时机完全由 reloadKey 令牌驱动：
-   * - 系列列表点击"产品家谱"：父组件递增令牌，触发重新拉取（同系列重复点、换系列均如此）；
-   * - 产品详细信息页返回：仅 active 由 false 变 true、令牌不变，不触发，保留原画布与数据。
-   * immediate 保证首次挂载即生效，但初始 active 为 false（停留在系列列表），不会产生多余请求。
+   * 家谱已独立为系统标签页：每个系列对应独立 query 的标签实例（keepAlive 缓存），
+   * 挂载即加载一次；同系列重复点击入口时同路径标签复用、以新 query 重新挂载加载，
+   * 标签切换往返时由 keepAlive 保留画布与数据，不再需要显隐/令牌机制。
    */
-  watch(
-    () => props.reloadKey,
-    () => {
-      if (props.active) {
-        loadFamilyTree();
-      }
-    },
-    { immediate: true }
-  );
+  onMounted(() => {
+    loadFamilyTree();
+  });
 </script>
 
 <style lang="less" scoped>

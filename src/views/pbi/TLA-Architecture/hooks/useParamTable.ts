@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onMounted, ref, type Ref } from "vue";
+import { computed, onBeforeUnmount, ref, watch, type Ref } from "vue";
 import type { PbiParamConfigItem, PbiPart } from "@/api/pbi/model";
 import { getAttrValue, isEmptyValue } from "../utils/partValue";
 
@@ -184,19 +184,30 @@ export const useParamTable = (options: UseParamTableOptions) => {
     maxWidth: `${width}px`
   });
 
-  onMounted(() => {
-    // 监听表格容器宽度变化（窗口缩放、侧边栏折叠等），驱动部件列宽自适应
-    if (tableWrapRef.value) {
-      wrapWidth.value = tableWrapRef.value.clientWidth;
+  /**
+   * 监听表格滚动容器 ref（flush: 'post' 保证 DOM 已布局）：
+   * 部件编号详情页的表格在异步数据返回后才由 v-if 渲染，容器属于"晚挂载"，
+   * 不能只在 onMounted 建立观察器；ref 一旦出现立即读取宽度并 observe，
+   * 容器被 v-if 移除时断开旧观察器，重新出现时再补建。
+   */
+  watch(
+    tableWrapRef,
+    (el, oldEl) => {
+      if (el === oldEl) return;
+      resizeObserver?.disconnect();
+      resizeObserver = null;
+      if (!el) return;
+      wrapWidth.value = el.clientWidth;
       resizeObserver = new ResizeObserver((entries) => {
         const entry = entries[0];
         if (entry) {
           wrapWidth.value = entry.contentRect.width;
         }
       });
-      resizeObserver.observe(tableWrapRef.value);
-    }
-  });
+      resizeObserver.observe(el);
+    },
+    { flush: "post", immediate: true }
+  );
 
   onBeforeUnmount(() => {
     resizeObserver?.disconnect();
