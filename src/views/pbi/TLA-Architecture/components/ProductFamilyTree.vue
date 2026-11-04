@@ -1,20 +1,20 @@
 <template>
   <div class="family-page h-full w-full bg-white flex flex-col p-4">
-    <!-- 顶部栏：家谱标题（组件已独立为系统标签页，无返回按钮，关闭标签即返回首页） -->
+    <!-- 顶部栏：图谱标题（组件已独立为系统标签页，无返回按钮，关闭标签即返回首页） -->
     <div class="flex items-center gap-4 mb-3">
       <h2 class="text-xl font-bold m-0">{{ pageTitle }}</h2>
     </div>
 
-    <!-- 家谱画布：拖拽空白平移、鼠标滚轮缩放（缩放以光标为锚点），右上角提供缩放/适应视图控制按钮 -->
+    <!-- 图谱画布：拖拽空白平移、鼠标滚轮缩放（缩放以光标为锚点），右上角提供缩放/适应视图控制按钮 -->
     <div class="family-canvas flex-1 min-h-0">
       <!-- 加载中 -->
       <div v-if="loading" class="family-state flex items-center justify-center h-full">
-        <ASpin size="large" tip="家谱数据加载中..." />
+        <ASpin size="large" tip="图谱数据加载中..." />
       </div>
 
-      <!-- 无有效家谱数据 -->
+      <!-- 无有效图谱数据 -->
       <div v-else-if="!root" class="family-state flex items-center justify-center h-full">
-        <AEmpty description="暂无产品家谱数据" />
+        <AEmpty description="暂无产品图谱数据" />
       </div>
 
       <VueFlow
@@ -66,7 +66,7 @@
     firstCategory: string;
     /** 二级分类显示名称 */
     secondCategory: string;
-    /** 二级分类内部名称（PRODUCTCLASSIFICATION），家谱接口入参 */
+    /** 二级分类内部名称（PRODUCTCLASSIFICATION），图谱接口入参 */
     productClassification: string;
   }>();
   const emit = defineEmits<{
@@ -79,25 +79,25 @@
     emit("part-click", wtPartNumber);
   };
 
-  /** 家谱树根节点，接口返回；null 表示无数据 */
+  /** 图谱树根节点，接口返回；null 表示无数据 */
   const root = ref<FamilyTreeNode | null>(null);
-  /** 家谱数据加载状态 */
+  /** 图谱数据加载状态 */
   const loading = ref(false);
 
   // 树数据 → Vue Flow 节点（叶序紧凑树）与正交折线边
   const { nodes, edges } = useFamilyTreeLayout(root);
 
-  /** 页面标题：一级分类 + 二级分类 + 产品家谱，分类名为空时自动跳过 */
+  /** 页面标题：一级分类 + 二级分类 + 产品图谱，分类名为空时自动跳过 */
   const pageTitle = computed(() => {
     const categories = [props.firstCategory, props.secondCategory].filter((name) => !!name);
-    return `${categories.join(" ")} 产品家谱`;
+    return `${categories.join(" ")} 产品图谱`;
   });
 
-  /** 加载产品家谱树：按二级分类内部名称调用后端自底向上递归接口 */
+  /** 加载产品图谱树：按二级分类内部名称调用后端自底向上递归接口 */
   const loadFamilyTree = async () => {
     const classification = props.productClassification;
     if (!classification) {
-      message.error("缺少二级分类信息，无法查询产品家谱");
+      message.error("缺少二级分类信息，无法查询产品图谱");
       return;
     }
     loading.value = true;
@@ -105,7 +105,7 @@
       root.value = await tlaApi.getFamilyTree(classification);
     } catch (error) {
       // defHttp 已统一提示错误，这里保证画布进入空态而非持续 loading
-      console.error("加载产品家谱失败", error);
+      console.error("加载产品图谱失败", error);
       root.value = null;
     } finally {
       loading.value = false;
@@ -113,7 +113,7 @@
   };
 
   /**
-   * 家谱已独立为系统标签页：每个系列对应独立 query 的标签实例（keepAlive 缓存），
+   * 图谱已独立为系统标签页：每个系列对应独立 query 的标签实例（keepAlive 缓存），
    * 挂载即加载一次；同系列重复点击入口时同路径标签复用、以新 query 重新挂载加载，
    * 标签切换往返时由 keepAlive 保留画布与数据，不再需要显隐/令牌机制。
    */

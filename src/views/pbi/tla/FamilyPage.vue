@@ -18,22 +18,26 @@
   import { useTlaTabs } from "./hooks/useTlaTabs";
 
   const route = useRoute();
-  /** query 参数归一化为字符串 */
-  const queryText = (value: unknown): string => (Array.isArray(value) ? value[0] || "" : value ? String(value) : "");
+  /** 路由参数/query 归一化为字符串 */
+  const routeText = (value: unknown): string =>
+    Array.isArray(value) ? value[0] || "" : value ? String(value) : "";
 
-  // 二级分类上下文：由首页系列卡片跳转时通过 query 带入
+  // 二级分类上下文：
+  // productClassification（二级分类内部名）是标签唯一标识，放在 path 参数中；
+  // 一二级分类显示名通过 query 携带。router-view 以 fullPath 为 key，
+  // 不同系列是独立组件实例（图谱各自挂载加载一次），切换标签内容天然对应。
   const classification = reactive({
-    firstCategory: queryText(route.query.firstCategory),
-    secondCategory: queryText(route.query.secondCategory),
-    productClassification: queryText(route.query.productClassification)
+    firstCategory: routeText(route.query.firstCategory),
+    secondCategory: routeText(route.query.secondCategory),
+    productClassification: routeText(route.params.classification)
   });
 
   const { openPartTab } = useTlaTabs();
-  /** 家谱跳转详情请求进行中标记，防止重复点击 */
+  /** 图谱跳转详情请求进行中标记，防止重复点击 */
   const partOpening = ref(false);
 
   /**
-   * 点击家谱节点部件编号：按编号拉取完整特性参数后打开"部件编号"系统标签。
+   * 点击图谱节点部件编号：按编号拉取完整特性参数后打开"部件编号"系统标签。
    * 特性参数展示列由一级分类决定，故携带当前系列的 firstCategory。
    */
   const handlePartClick = async (wtPartNumber: string) => {

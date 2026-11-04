@@ -1,25 +1,37 @@
 <template>
-  <RouterView>
-    <template #default="{ Component, route }">
-      <transition :name="getTransitionName(route, getEnableTransition, getBasicTransition)" mode="out-in" appear>
-        <keep-alive v-if="openCache" :include="getCaches">
-          <component :is="setName(route, Component)" :key="route.fullPath" />
-        </keep-alive>
-        <component v-else :is="Component" :key="route.fullPath" />
-      </transition>
-    </template>
-  </RouterView>
-  <FrameLayout v-if="getCanEmbedIFramePage" />
+  <div class="page-layout">
+    <!-- PBI 模块全局分类侧栏：独立于标签页之外，仅 /pbi 路由显示 -->
+    <PbiGlobalSidebar v-if="isPbiRoute" />
+    <div class="page-layout__content">
+      <RouterView>
+        <template #default="{ Component, route }">
+          <transition :name="getTransitionName(route, getEnableTransition, getBasicTransition)" mode="out-in" appear>
+            <keep-alive v-if="openCache" :include="getCaches">
+              <component :is="setName(route, Component)" :key="route.fullPath" />
+            </keep-alive>
+            <component v-else :is="Component" :key="route.fullPath" />
+          </transition>
+        </template>
+      </RouterView>
+      <FrameLayout v-if="getCanEmbedIFramePage" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, unref } from "vue";
+  import { useRoute } from "vue-router";
   import FrameLayout from "@/layouts/iframe/index.vue";
+  import PbiGlobalSidebar from "@/layouts/pbi/index.vue";
   import { useMultipleTabSetting, useRootSetting, useTransitionSetting } from "@mfish/core/hooks";
   import { useMultipleTabStore } from "@mfish/stores/modules";
   import { RouterTransitionEnum } from "@mfish/core/enums";
 
   defineOptions({ name: "PageLayout" });
+
+  const route = useRoute();
+  /** 仅 PBI 路由挂载分类侧栏，其他模块保持原有布局 */
+  const isPbiRoute = computed(() => /^\/pbi(?:\/|$)/.test(route.path));
 
   const { getShowMultipleTab } = useMultipleTabSetting();
   const tabStore = useMultipleTabStore();
@@ -57,3 +69,20 @@
     return def || RouterTransitionEnum.FADE_SIDE_LEFT;
   }
 </script>
+
+<style lang="less" scoped>
+  .page-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  // 路由内容区：侧栏收起后自动占满，保持原有 h-full 页面高度链路
+  .page-layout__content {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+  }
+</style>

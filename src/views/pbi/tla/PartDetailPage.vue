@@ -58,12 +58,16 @@
   import { getPartDetailSession } from "./hooks/useTlaTabs";
 
   const route = useRoute();
-  /** query 参数归一化为字符串 */
-  const queryText = (value: unknown): string => (Array.isArray(value) ? value[0] || "" : value ? String(value) : "");
+  /** 路由参数/query 归一化为字符串 */
+  const routeText = (value: unknown): string =>
+    Array.isArray(value) ? value[0] || "" : value ? String(value) : "";
 
-  /** 一级分类（决定特性参数展示列）与部件编号，由来源页跳转时通过 query 带入 */
-  const firstCategoryText = queryText(route.query.firstCategory);
-  const wtPartNumber = queryText(route.query.wtPartNumber);
+  /**
+   * 一级分类（决定特性参数展示列）通过 query 携带；
+   * 部件编号是标签唯一标识，放在 path 参数中，不同部件对应独立标签、独立组件实例。
+   */
+  const firstCategoryText = routeText(route.query.firstCategory);
+  const wtPartNumber = routeText(route.params.wtPartNumber);
 
   /** 当前展示的部件详情：优先消费内存会话，缺失或编号不匹配时按编号回源 */
   const part = ref<PbiPart | null>(null);
@@ -74,7 +78,7 @@
       loading.value = false;
       return;
     }
-    // 来源页已暂存完整部件（参数配置表格/家谱跳转），直接消费避免重复请求
+    // 来源页已暂存完整部件（参数配置表格/图谱跳转），直接消费避免重复请求
     const cached = getPartDetailSession(wtPartNumber);
     if (cached) {
       part.value = cached;

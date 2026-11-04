@@ -1,6 +1,6 @@
 import type { MenuSetting } from "@mfish/types/src/type/config";
 import { computed, ref, unref } from "vue";
-import { useAppStore } from "@mfish/stores/modules";
+import { useAppStore, useUserStore } from "@mfish/stores/modules";
 import {
   MenuModeEnum,
   MenuTypeEnum,
@@ -24,9 +24,23 @@ export function useMenuSetting() {
 
   const getCollapsed = computed(() => appStore.getMenuSetting.collapsed);
 
-  const getMenuType = computed(() => appStore.getMenuSetting.type);
+  const getMenuType = computed(() => {
+    const userStore = useUserStore();
+    // 普通用户固定使用本地默认菜单类型（顶部菜单），不读数据库；管理员读数据库配置
+    if (userStore.getUserInfo?.account !== "admin") {
+      return MenuTypeEnum.TOP_MENU;
+    }
+    return appStore.getMenuSetting.type;
+  });
 
-  const getMenuMode = computed(() => appStore.getMenuSetting.mode);
+  const getMenuMode = computed(() => {
+    const userStore = useUserStore();
+    // 普通用户固定使用本地默认菜单模式（横向），不读数据库；管理员读数据库配置
+    if (userStore.getUserInfo?.account !== "admin") {
+      return MenuModeEnum.HORIZONTAL;
+    }
+    return appStore.getMenuSetting.mode;
+  });
 
   const getMenuFixed = computed(() => appStore.getMenuSetting.fixed);
 

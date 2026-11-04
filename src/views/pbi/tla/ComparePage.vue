@@ -41,9 +41,9 @@
       </div>
     </template>
 
-    <!-- 会话失效（页面刷新后内存会话清空）：引导关闭标签返回参数配置重新发起 -->
+    <!-- 暂无对比型号（用户手动清空后）：可关闭标签返回参数配置重新发起；页面刷新不会清空对比会话 -->
     <div v-else class="flex-1 flex flex-col items-center justify-center gap-4">
-      <AEmpty description="对比型号不可用（页面刷新后会话已清空），请返回参数配置重新选择型号发起对比" />
+      <AEmpty description="暂无可对比的型号，请返回参数配置选择型号后重新发起对比" />
       <AButton type="primary" @click="closeCurrentTab">返回参数配置</AButton>
     </div>
   </div>

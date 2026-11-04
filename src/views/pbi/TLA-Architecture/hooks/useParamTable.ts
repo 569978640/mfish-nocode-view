@@ -2,15 +2,45 @@ import { computed, onBeforeUnmount, ref, watch, type Ref } from "vue";
 import type { PbiParamConfigItem, PbiPart } from "@/api/pbi/model";
 import { getAttrValue, isEmptyValue } from "../utils/partValue";
 
+/** 折叠组头汇总配置：引用组内某个属性，按序号取逗号分隔后的某一段 */
+export interface FoldDisplayConfig {
+  /** 被引用属性的 Windchill 内部名称 */
+  internalName: string;
+  /** 被引用属性的部件视图列名 */
+  columnName: string;
+  /** 逗号分隔后的取值序号（从 1 开始；未配置时展示完整值） */
+  index?: number;
+}
+
 /** 属性组视图模型 */
 export interface ParamGroup {
   /** 属性组名 */
   name: string;
   /** 属性组背景色（带 # 前缀） */
   bgColor: string;
+  /** 是否允许折叠（组内配置一致，任一行配置为"是"即允许） */
+  allowFold: boolean;
+  /** 折叠后组头汇总配置，未配置或引用属性不存在时为空 */
+  foldConfig?: FoldDisplayConfig;
   /** 组内属性列表 */
   items: PbiParamConfigItem[];
 }
+
+/**
+ * 解析折叠汇总配置：
+ * - com.bfces.SCR_ASC：展示该属性完整值
+ * - com.bfces.DOC|1|：按英文逗号分段后取第 1 段（序号从 1 开始）
+ */
+const parseFoldDisplayValue = (value: string): { internalName: string; index?: number } | null => {
+  const [namePart, indexPart] = value.split("|");
+  const internalName = namePart?.trim();
+  if (!internalName) return null;
+  const index = Number((indexPart ?? "").trim());
+  return {
+    internalName,
+    index: Number.isInteger(index) && index > 0 ? index : undefined
+  };
+};
 
 /** 属性行状态：空（暂无内容）/ 同（完全一致）/ 异（存在差异）/ 单列（无比较对象，如产品详情页） */
 type RowState = "empty" | "same" | "diff" | "single";
@@ -23,9 +53,8 @@ interface UseParamTableOptions {
   tablePartList: Ref<PbiPart[]>;
 }
 
-/** 第一列宽度上下限及左右内边距（16px * 2） */
+/** 第一列宽度下限及左右内边距（16px * 2） */
 const FIRST_COL_MIN = 140;
-const FIRST_COL_MAX = 260;
 const FIRST_COL_PADDING = 32;
 /** 部件列最小宽度：部件很多时每列固定为此宽度并出现横向滚动条 */
 const PART_COL_MIN = 200;
@@ -52,13 +81,31 @@ export const useParamTable = (options: UseParamTableOptions) => {
         group = {
           name,
           bgColor: item.groupColor ? `#${item.groupColor}` : "#E7E6E6",
+          allowFold: item.allowFold?.trim() === "是",
           items: []
         };
         groupMap.set(name, group);
+      } else if (item.allowFold?.trim() === "是") {
+        // 组内配置一致，兜底任一行为"是"时允许折叠
+        group.allowFold = true;
       }
       group.items.push(item);
     }
-    return [...groupMap.values()];
+    const groups = [...groupMap.values()];
+    // 折叠汇总配置取组内首个非空值，并在全量属性中解析被引用属性的列名（不受属性过滤影响）
+    groups.forEach((group) => {
+      const raw = group.items.map((item) => item.foldDisplayValue?.trim()).find(Boolean);
+      if (!raw) return;
+      const spec = parseFoldDisplayValue(raw);
+      if (!spec) return;
+      const target =
+        group.items.find((item) => item.internalName?.trim() === spec.internalName) ??
+        group.items.find((item) => item.internalName?.trim().toLowerCase() === spec.internalName.toLowerCase());
+      if (target?.columnName) {
+        group.foldConfig = { ...spec, columnName: target.columnName };
+      }
+    });
+    return groups;
   });
 
   // 空数据提示文案
@@ -138,7 +185,8 @@ export const useParamTable = (options: UseParamTableOptions) => {
 
   /**
    * 第一列（特性参数列）固定宽度：
-   * 用 canvas 按真实字体测量全部属性配置中最长的 param/displayName 文本宽度 + 内边距，夹取上下限；
+   * 用 canvas 按真实字体测量全部属性配置中最长的「英文(中文)」文本宽度 + 内边距，
+   * 按属性名称实际长度自适应（仅限制下限），保证名称完整展示不截断；
    * 基于全量配置而非当前展示行计算，勾选过滤复选框时宽度保持稳定
    */
   const firstColumnWidth = computed(() => {
@@ -149,17 +197,19 @@ export const useParamTable = (options: UseParamTableOptions) => {
       if (ctx) {
         for (const item of configList.value) {
           ctx.font = '600 13px "PingFang SC", "Microsoft YaHei", sans-serif';
-          maxTextWidth = Math.max(maxTextWidth, ctx.measureText(item.param || "").width);
+          let lineWidth = ctx.measureText(item.param || "").width;
           if (item.displayName) {
+            // 中文名与英文名同一行展示，宽度按两段文本分别测量后累加
             ctx.font = '12px "PingFang SC", "Microsoft YaHei", sans-serif';
-            maxTextWidth = Math.max(maxTextWidth, ctx.measureText(item.displayName).width);
+            lineWidth += ctx.measureText(`(${item.displayName})`).width + 2;
           }
+          maxTextWidth = Math.max(maxTextWidth, lineWidth);
         }
       }
     } catch {
       // canvas 不可用时回退到最小宽度
     }
-    return Math.min(FIRST_COL_MAX, Math.max(FIRST_COL_MIN, Math.ceil(maxTextWidth) + FIRST_COL_PADDING));
+    return Math.max(FIRST_COL_MIN, Math.ceil(maxTextWidth) + FIRST_COL_PADDING);
   });
 
   /**

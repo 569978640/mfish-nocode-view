@@ -1,11 +1,11 @@
 /**
- * @description PBI 产品家谱树模型
+ * @description PBI 产品图谱树模型
  */
 
 /**
- * 产品家谱树节点（部件逐代衍生关系）
+ * 产品图谱树节点（部件逐代衍生关系）
  * 节点属性与后端模型字段对应：PN=wtPartNumber、状态=state、DOC=doc、DPF=dpf、SCR=scrAsc、实际发货量=shipment。
- * V1.2.0 后端在主库家谱基础上，按部件编号批量查询接口库 V_WINDCHILL_SHIPMENT 回填实际发货量；
+ * V1.2.0 后端在主库图谱基础上，按部件编号批量查询接口库 V_WINDCHILL_SHIPMENT 回填实际发货量；
  * 规格软属性无值时为 null（卡片仍展示标签，值留空），值含逗号时卡片只显示首个逗号前内容；
  * 视图无记录或接口库不可用时 shipment 为 null，卡片缺省展示 0。
  */
@@ -18,6 +18,8 @@ export interface FamilyTreeNode {
   name?: string;
   /** 生命周期状态（RELEASED 展示为已发布，OBSOLETE 展示为已废弃） */
   state: string;
+  /** 阶段（软属性 com.bfces.ReleasePhaseCode，对应视图 ReleasePhaseCode 列；无值为 null） */
+  releasePhaseCode?: string;
   /** 部件图片静态地址（按部件编号拼接；为空或加载失败时卡片回退默认四宫格图标） */
   image?: string;
   /** DOC 规格（软属性 com.bfces.DOC；无值时标签留空，含逗号只取首段） */

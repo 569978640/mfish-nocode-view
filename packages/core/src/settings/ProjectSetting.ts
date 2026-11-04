@@ -95,10 +95,10 @@ const setting: ProjectConfig = {
     hidden: false,
     // Menu width
     menuWidth: 210,
-    // Menu mode
-    mode: MenuModeEnum.INLINE,
-    // Menu type
-    type: MenuTypeEnum.SIDEBAR,
+    // 菜单模式：本地默认顶部菜单（普通用户固定使用；管理员读数据库配置，未配置时同此默认）
+    mode: MenuModeEnum.HORIZONTAL,
+    // 菜单类型：顶部菜单
+    type: MenuTypeEnum.TOP_MENU,
     // Menu theme
     theme: ThemeEnum.LIGHT,
     // Split menu

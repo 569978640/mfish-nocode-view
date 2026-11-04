@@ -57,8 +57,9 @@ async function setAppConfigStore(userStore: ReturnType<typeof useUserStoreWithOu
     // 配置接口异常时不阻塞，使用本地默认配置继续应用角色默认值
     console.log("加载系统界面配置失败：", error);
   }
-  // 左侧菜单折叠：普通用户默认折叠（会话内仍可手动展开，刷新/重新登录后恢复折叠）；
-  // 管理员读数据库配置，数据库无配置时取本地默认值 false（不折叠）
+  // 普通用户左侧菜单默认折叠（会话内仍可手动展开，刷新/重新登录后恢复折叠）；
+  // 菜单模式/类型的角色差异在 getMenuMode/getMenuType 计算属性中门控。
+  // 管理员读数据库配置，数据库无配置时取本地默认值。
   if (userStore.getUserInfo?.account !== "admin") {
     // 克隆避免直接修改模块级默认配置单例
     projCfg = cloneDeep(projCfg);

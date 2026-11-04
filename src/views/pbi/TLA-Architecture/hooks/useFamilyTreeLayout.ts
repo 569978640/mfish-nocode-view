@@ -3,7 +3,7 @@ import type { Edge, Node } from "@vue-flow/core";
 import type { FamilyTreeNode } from "@/api/pbi/model";
 
 /** 节点卡片碰撞盒宽高（px） */
-export const FAMILY_NODE_W = 264;
+export const FAMILY_NODE_W = 220;
 export const FAMILY_NODE_H = 160;
 /** 同层兄弟节点水平间距 */
 const SIBLING_GAP = 36;
@@ -12,7 +12,7 @@ const LEVEL_GAP = 72;
 
 /** 自定义边类型：父子正交直角折线（无箭头） */
 export const FAMILY_EDGE_TYPE = "familyOrthogonal";
-/** 自定义节点类型：家谱卡片 */
+/** 自定义节点类型：图谱卡片 */
 export const FAMILY_NODE_TYPE = "familyCard";
 
 interface LayoutUnit {
@@ -36,7 +36,7 @@ interface LayoutResult {
 }
 
 /**
- * 产品家谱树布局：
+ * 产品图谱树布局：
  * 叶序紧凑树——叶子从左到右等距排列，父节点水平居中于其子树首末叶子之间；
  * 深度决定纵向层级。输出 Vue Flow 的 nodes/edges（节点为自定义卡片，边为正交折线）。
  * 节点坐标为碰撞盒左上角，后续接口数据替换 root 后布局自动重算。
@@ -99,7 +99,7 @@ export const useFamilyTreeLayout = (root: Ref<FamilyTreeNode | null>) => {
           y: unit.depth * (FAMILY_NODE_H + LEVEL_GAP)
         },
         data: unit.data,
-        // 家谱层级结构固定，不允许节点自由拖动造成错位；画布平移与缩放不受影响
+        // 图谱层级结构固定，不允许节点自由拖动造成错位；画布平移与缩放不受影响
         draggable: false,
         connectable: false
       };

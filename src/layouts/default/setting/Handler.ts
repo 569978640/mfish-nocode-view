@@ -19,6 +19,7 @@ export function baseHandler(event: HandlerEnum, value: any, noSave?: boolean) {
     updateHeaderBgColor();
     updateSidebarBgColor();
   }
+  // 服务端根据 Nacos 配置(sys.config.style-global)决定全局统一或按用户各自保存
   if (!noSave) {
     saveSysConfig({ config: JSON.stringify(unref(appStore.getProjectConfig)), type: 0 }, false).then();
   }

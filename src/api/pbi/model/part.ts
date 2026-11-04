@@ -23,6 +23,10 @@ export interface PbiParamConfigItem {
   groupColor?: string;
   /** 属性行背景色（十六进制，不含 #） */
   paramColor?: string;
+  /** 是否允许折叠属性组（"是"允许折叠，否或空不允许） */
+  allowFold?: string;
+  /** 折叠后组头显示的汇总值配置，格式：internalName 或 internalName|序号|（序号从 1 开始） */
+  foldDisplayValue?: string;
 }
 
 /**
@@ -34,8 +38,10 @@ export interface PbiPart {
   wtPartNumber: string;
   /** 部件名称 */
   name: string;
-  /** 部件图片地址 */
+  /** 部件图片地址（第一张，兼容单图逻辑） */
   image: string;
+  /** 部件图片地址列表：第一张为编号.png，第二张为编号_2.png，是否存在由前端加载判断 */
+  images?: string[];
   /** 部件 Windchill 信息页地址（已含 Basic 认证凭据，浏览器新标签页打开） */
   pageUrl?: string;
   /** 部件扩展属性，key 为大写下划线列名（与 PbiParamConfigItem.columnName 对应） */

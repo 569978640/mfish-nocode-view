@@ -17,7 +17,7 @@
     fill: "none"
   };
 
-  /** 正交折线路径（同一父节点的所有子边水平段位于同一 y，视觉上形成贯穿的家谱分支线） */
+  /** 正交折线路径（同一父节点的所有子边水平段位于同一 y，视觉上形成贯穿的图谱分支线） */
   const orthogonalPath = computed(() => {
     const midY = (props.sourceY + props.targetY) / 2;
     return `M ${props.sourceX} ${props.sourceY} V ${midY} H ${props.targetX} V ${props.targetY}`;

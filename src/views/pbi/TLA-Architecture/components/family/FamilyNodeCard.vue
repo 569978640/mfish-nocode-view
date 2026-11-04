@@ -1,7 +1,7 @@
 <template>
-  <!-- 家谱节点卡片：红色卡片头 + DOC/DPF/SCR 规格标签（属性名/值双色区分） + 实际发货量 -->
+  <!-- 图谱节点卡片：卡片头按状态/阶段着色 + DOC/DPF/SCR 规格标签（属性名/值双色区分） + 实际发货量 -->
   <div class="family-node">
-    <div class="family-node__header">
+    <div class="family-node__header" :class="{ 'is-light': isLightHeader }" :style="{ background: headerBackground }">
       <span class="family-node__icon">
         <!-- 部件图片：复用参数配置同款 AImage，点击悬浮放大预览；地址为空时展示四宫格模块图标；图片加载失败由 fallback 回退同款图标 -->
         <AImage
@@ -60,7 +60,7 @@
 
   defineOptions({ name: "FamilyNodeCard" });
   const props = defineProps<{ data: FamilyTreeNode }>();
-  /** 点击部件编号：向上抛出部件编号，由家谱页跳转详细特性参数页 */
+  /** 点击部件编号：向上抛出部件编号，由图谱页跳转详细特性参数页 */
   const emit = defineEmits<{ (e: "part-click", wtPartNumber: string): void }>();
 
   /**
@@ -76,15 +76,6 @@
       "</svg>"
   )}`;
 
-  /** 生命周期状态中文映射：RELEASED=已发布、OBSOLETE=已废弃 */
-  const STATE_TEXT_MAP: Record<string, string> = {
-    RELEASED: "已发布",
-    OBSOLETE: "已废弃"
-  };
-
-  /** 状态中文展示：命中映射显示中文，其他/空值原样展示或留空 */
-  const stateText = computed(() => STATE_TEXT_MAP[props.data.state] ?? props.data.state ?? "");
-
   /**
    * 规格值展示格式化：无值（undefined/null/空串）返回空串；
    * 有值时只显示第一个逗号（兼容中英文逗号）之前的内容并去除首尾空白
@@ -97,9 +88,65 @@
     return value.split(/[,，]/)[0].trim();
   };
 
+  const releasePhaseText = computed(() => formatSpec(props.data.releasePhaseCode));
+
+  /** 默认卡片头背景（非RELEASED/阶段未匹配时保持原红色渐变） */
+  const DEFAULT_HEADER_BACKGROUND = "linear-gradient(90deg, #d43030 0%, #c62828 100%)";
+
+  /** 阶段值对应卡片头颜色（兼容完整名称、缩写与带括号写法，匹配时忽略大小写和空格） */
+  const PHASE_COLOR_MAP: Record<string, string> = {
+    "PRODUCTION(P)": "#00aee8",
+    PRODUCTION: "#00aee8",
+    P: "#00aee8",
+    "LIMITED(L)": "#00a86b",
+    LIMITED: "#00a86b",
+    L: "#00a86b",
+    "DEVELOPMENT(D)": "#96d05b",
+    DEVELOPMENT: "#96d05b",
+    D: "#96d05b",
+    "EXPERIMENTAL(E)": "#d7e8d4",
+    EXPERIMENTAL: "#d7e8d4",
+    E: "#d7e8d4",
+    "CONCEPT(X)": "#d7e8d4",
+    CONCEPT: "#d7e8d4",
+    X: "#d7e8d4"
+  };
+
+  /** 浅色卡片头：需要切换为深色文字，保证白底浅绿场景可读 */
+  const LIGHT_HEADER_COLORS = new Set(["#96d05b", "#d7e8d4"]);
+
+  /** 卡片头底色：OBSOLETE=灰色；RELEASED按阶段值着色；其他状态或阶段未匹配保持默认红色渐变 */
+  const headerColor = computed(() => {
+    if (props.data.state === "OBSOLETE") {
+      return "#808080";
+    }
+    if (props.data.state === "RELEASED") {
+      const phaseKey = releasePhaseText.value.replaceAll(/\s+/g, "").toUpperCase();
+      return PHASE_COLOR_MAP[phaseKey] ?? "";
+    }
+    return "";
+  });
+
+  const headerBackground = computed(() => headerColor.value || DEFAULT_HEADER_BACKGROUND);
+  const isLightHeader = computed(() => LIGHT_HEADER_COLORS.has(headerColor.value));
+
+  /** 生命周期状态中文映射：RELEASED=已发布（阶段为空时的兜底）、OBSOLETE=已废弃 */
+  const STATE_TEXT_MAP: Record<string, string> = {
+    RELEASED: "已发布",
+    OBSOLETE: "已废弃"
+  };
+
   const docText = computed(() => formatSpec(props.data.doc));
   const dpfText = computed(() => formatSpec(props.data.dpf));
   const scrText = computed(() => formatSpec(props.data.scrAsc));
+
+  /** 状态展示：RELEASED 时显示阶段值（阶段为空回退已发布），OBSOLETE 显示已废弃，其他原样展示 */
+  const stateText = computed(() => {
+    if (props.data.state === "RELEASED") {
+      return releasePhaseText.value || STATE_TEXT_MAP.RELEASED;
+    }
+    return STATE_TEXT_MAP[props.data.state] ?? props.data.state ?? "";
+  });
 
   /** 实际发货量：缺失/空串时显示 0，0 等其它有效值原样展示 */
   const shipmentText = computed(() =>
@@ -115,7 +162,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 264px;
+    width: 220px;
     height: 160px;
     padding: 0;
     overflow: hidden;
@@ -138,13 +185,26 @@
     box-shadow: 0 10px 24px rgba(212, 48, 48, 0.22);
   }
 
-  // ---------- 红色卡片头 ----------
+  // ---------- 卡片头：按状态/阶段着色 ----------
   .family-node__header {
     display: flex;
     align-items: center;
     height: 48px;
     padding: 0 12px;
     background: linear-gradient(90deg, #d43030 0%, #c62828 100%);
+  }
+
+  // 浅色卡片头（亮绿/浅绿阶段）：文字与图标底色改为深色，保证可读性
+  .family-node__header.is-light {
+    .family-node__pn,
+    .family-node__state {
+      color: #1f2937;
+    }
+
+    .family-node__icon {
+      color: #1f2937;
+      background: rgba(31, 41, 55, 0.12);
+    }
   }
 
   .family-node__icon {
@@ -191,6 +251,8 @@
     color: #fff;
     text-align: left;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     background: transparent;
     border: none;
     cursor: pointer;

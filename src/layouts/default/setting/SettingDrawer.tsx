@@ -376,8 +376,9 @@ export default defineComponent({
                 <AppDarkModeToggle />
               </div>
             )}
-            <Divider>{() => t("layout.setting.frameLayout")}</Divider>
-            {renderSidebar()}
+            {/* 界面布局仅管理员可配置，普通用户固定顶部菜单模式 */}
+            {unref(isAdmin) && <Divider>{() => t("layout.setting.frameLayout")}</Divider>}
+            {unref(isAdmin) && renderSidebar()}
             <Divider>{() => t("layout.setting.sysTheme")}</Divider>
             {renderMainTheme()}
             <Divider>{() => t("layout.setting.headerTheme")}</Divider>

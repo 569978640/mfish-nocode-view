@@ -59,6 +59,7 @@
   function setTheme(darkMode: ThemeEnum) {
     setDarkMode(darkMode);
     setDarkTheme(darkMode);
+    // 服务端根据 Nacos 配置(sys.config.style-global)决定全局统一或按用户各自保存
     saveSysConfig({ config: JSON.stringify(unref(appStore.getProjectConfig)), type: 0 }, false).then();
   }
 </script>

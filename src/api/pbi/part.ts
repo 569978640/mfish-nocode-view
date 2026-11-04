@@ -54,7 +54,7 @@ export const partApi = {
   },
 
   /**
-   * 按部件编号获取单个产品型号完整特性参数（家谱点击部件编号进入详情页）
+   * 按部件编号获取单个产品型号完整特性参数（图谱点击部件编号进入详情页）
    * @param firstCategory 一级分类（决定特性参数展示列）
    * @param wtPartNumber 部件编号
    * @returns 产品型号详情；未查到时返回 null

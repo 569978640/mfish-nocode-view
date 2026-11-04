@@ -36,6 +36,7 @@
   function handleResetSetting() {
     try {
       changeAppConfig(defaultSetting);
+      // 服务端根据 Nacos 配置(sys.config.style-global)决定全局统一或按用户各自保存
       saveSysConfig({ config: JSON.stringify(unref(appStore.getProjectConfig)), type: 0 }, false).then(() => {
         createMessage.success(t("layout.setting.resetSuccess"));
       });
